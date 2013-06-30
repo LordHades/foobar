@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-//////////////////////////////////////////////////////////////////////////
-								README
-//////////////////////////////////////////////////////////////////////////
-
 MEDIA:
 	-http://foobar-null-42.tumblr.com/
 	-https://twitter.com/f0obarbaz
@@ -261,14 +255,3 @@ FEATURES:
 		-vip only
 		-allows for a potato to be shot at current dj
 		(/spud)
-=======
-=======
->>>>>>> 400d964e0922b3684d0a5e9ef7245ca9a0bb05e2
-foobar
-======
-
-a tt.fm bot prototype
-<<<<<<< HEAD
->>>>>>> 400d964e0922b3684d0a5e9ef7245ca9a0bb05e2
-=======
->>>>>>> 400d964e0922b3684d0a5e9ef7245ca9a0bb05e2
