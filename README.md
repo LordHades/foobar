@@ -1,11 +1,11 @@
-MEDIA:
+###MEDIA:
 	-http://foobar-null-42.tumblr.com/
 	-https://twitter.com/f0obarbaz
 	-https://twitter.com/fawkesbot
 
 
 
-CHAT & PM(private message) COMMANDS:
+###CHAT & PM(private message) COMMANDS:
 
 	 /status or .status
 	 	shows the status of mod-toggled settings
@@ -116,10 +116,7 @@ CHAT & PM(private message) COMMANDS:
 	 	thank the bot
 
 
-
-
-
-MOD-ONLY COMMANDS:
+###MOD-ONLY COMMANDS:
 
 	 /getup or .getup  
 	 	tell the bot to hop up and dj
@@ -183,7 +180,7 @@ MOD-ONLY COMMANDS:
 
 
 
-FEATURES:
+###FEATURES:
 
 	+afk
 		- mark yourself as "afk" and "back"
