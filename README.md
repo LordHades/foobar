@@ -1,7 +1,7 @@
 ###MEDIA:
-	-http://foobar-null-42.tumblr.com/
-	-https://twitter.com/f0obarbaz
-	-https://twitter.com/fawkesbot
+	[A.I. tumblr](http://foobar-null-42.tumblr.com/)
+	[foobar tweeter](https://twitter.com/f0obarbaz)
+	[fawkes tweeter](https://twitter.com/fawkesbot)
 
 
 
