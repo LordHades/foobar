@@ -226,7 +226,11 @@
 
 	+cleverbot
 		-carry on conversations in pm
-
+	
+	+earthquakes
+		-tell the 3 most recent global earthquakes
+		(/quake)
+		
 	+iheartquotes
 		-show random riddles & quotes
 		(/joke, /quote)
