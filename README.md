@@ -1,6 +1,7 @@
 ###MEDIA:
 	A.I. tumblr: http://foobar-null-42.tumblr.com/
 	foobar tweeter: https://twitter.com/f0obarbaz
+	null tweeter: https://twitter.com/_nullbot
 	fawkes tweeter: https://twitter.com/fawkesbot
 
 
