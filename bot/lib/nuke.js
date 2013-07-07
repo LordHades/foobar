@@ -6,17 +6,17 @@ module.exports = {
 			transmit = [];
 			wiretap = 'true';
 			var systems = setTimeout(function(){
-				var x = transmit.indexOf('foo');
-				var y = transmit.indexOf('bar');
-				var z = transmit.indexOf('baz');
+				var x = transmit.indexOf('xxx');
+				var y = transmit.indexOf('xxx');
+				var z = transmit.indexOf('xxx');
 				if(x >= 0 && y >= 0 && z >= 0){
 					launch = true;
 					var count = setTimeout(function(){
-						foo.nuke.countdown();
+						bot.nuke.countdown();
 					},500);
 				}else{
 					launch = false;
-					foo.nuke.evals();
+					bot.nuke.evals();
 				}
 			}, 5000);
 			if(debug){
@@ -24,27 +24,29 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in nuke(check)...');
+			bot.signal.error(err);
 		}
 	},
 	countdown: function(){
 		try{
 			var three = setTimeout(function(){
-				foo.speak('3');
+				bot.speak('3');
 			}, 1000);
 			var two = setTimeout(function(){
-				foo.speak('2');
+				bot.speak('2');
 			}, 2000);
 			var one = setTimeout(function(){
-				foo.speak('1');
+				bot.speak('1');
 			}, 3000);
 			var eval = setTimeout(function(){
-				foo.nuke.evals();
+				bot.nuke.evals();
 			}, 3500);
 			if(debug){
 				console.log('nuke(countdown) running...');
 			}
 		}catch(err){
 			console.log('error in log(listen)...');
+			bot.signal.error(err);
 		}
 	},
 	evals: function(){
@@ -52,11 +54,11 @@ module.exports = {
 			wiretap = 'false';
 			var controls = setTimeout(function(){
 				if(launch){
-					foo.nuke.launch();
+					bot.nuke.launch();
 					transmission = [];
 				}
 				else{
-					foo.nuke.disarm();
+					bot.nuke.disarm();
 					transmission = [];
 				}
 			}, 500);
@@ -65,27 +67,29 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in nuke(evals)...');
+			bot.signal.error(err);
 		}
 	},
 	disarm: function(){
 		try{
-			foo.speak('teh nuke was disarmed...');
+			bot.speak('teh nuke was disarmed...');
 			if(debug){
 				console.log('nuke(disarm) running...');
 			}
 		}catch(err){
 			console.log('error in nuke(disarm)...');
+			bot.signal.error(err);
 		}
 	},
 	launch: function(){
 		try{
-				foo.speak('nuclear targeting systems engaged');
+				bot.speak('nuclear targeting systems engaged');
 			var warhead = setTimeout(function(){
-				foo.speak('warhead armed');
+				bot.speak('warhead armed');
 			},1000);
 			var nuked = setTimeout(function(data){
 				for(i in djs){
-					foo.remDj(djs[i]);
+					bot.remDj(djs[i]);
 				}
 			},3600);
 			if(debug){
@@ -93,6 +97,7 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in nuke(launch)...');
+			bot.signal.error(err);
 		}
 	}
 }

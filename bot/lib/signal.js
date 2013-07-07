@@ -2,49 +2,61 @@ module.exports = {
 	greet: function(data){
 		try{
 			var user = data.user[0];
-			var info = 'Welcome to ' + roomname + ' @' + user.name + '. /help for @foobar commands';
+			var info = 'Welcome to ' + roomname + ' @' + user.name;
+			var botstuff = ' /help for ' + botname + ' commands'
+			var greeting;
 			if(on){
-				if(user.userid == '51958aa5eb35c1598caf8627'){
-					console.log("running...");
-				}
-				foo.speak(info + Qinfo);
+				greeting = info + ' ' + Qinfo;
+			}else if(battle){
+				greeting = info + ' ' + rules;
 			}else{
-				if(user.userid == '51958aa5eb35c1598caf8627'){
-					console.log("running...");
-				}
-				foo.speak(info);
+				greeting = info;
+			}
+			if(user.userid !== botid){
+				bot.pm(greeting + botstuff, user.userid);
+			}else{
+				console.log('> running...');
 			}
 			if(debug){
 				console.log('signal(greet) running...');
 			}
 		}catch(err){
 			console.log('error in signal(greet)...');
+			bot.signal.error(err);
 		}
 	},
 	call: function(data){
-		try{
-			foo.roomInfo(true, function(data) {
-				var djnum = data.room.metadata.djcount;
-				for(i in djs) {
-					if(djs[i].id == data.userid) {
+		try{		
+			var id;
+			switch(data.command){
+				case 'speak':
+					id = data.userid;
+				break;
+				case 'rem_dj':
+					id = data.user[0].userid;
+				break;
+				default: 
+					if(q.length > 0){
+						id = q[0].id;
+					}
+				break;
+			}
+			var djnum;
+			bot.roomInfo(true, function(data) {
+				djnum = data.room.metadata.djcount;
+				for(i in djs){
+					if(djs[i].id == id) {
 						return false;
 					}
 				}
 				if(djnum < 5){
-					if(q.length > 0 && djs.length < 5) {
-						for(i in afks){
-							if(afks[i].id == q[0].id){
-								q.shift();
-								foo.signal.call(data);
-								return;
-							}
-						}
-						foo.speak('You\'re up next! @' + q[0].name + ' You\'ve got 30 seconds...');
+					if(q.length > 0){
+						bot.speak('You\'re up next! @' + q[0].name + ' You\'ve got 30 seconds...');
 						var waitingfor = q[0].id;
-						setTimeout(function() {
+						var calling = setTimeout(function() {
 							if(q.length > 0 && q[0].id == waitingfor) {
 								q.shift();
-								foo.signal.call(data);
+								bot.signal.call(data);
 							}
 						}, 30000);
 					}
@@ -55,23 +67,25 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in signal(call)...');
+			bot.signal.error(err);
 		}
 	},
 	random: function(array, msg){
 		try{
 			var random = Math.floor(Math.random() * array.length);
 			var msg = array[random];
-			foo.talk(msg);	
+			bot.talk(msg);	
 			if(debug){
 				console.log('signal(random) running...');
 			}
 		}catch(err){
 			console.log('error in signal(random)...');
+			bot.signal.error(err);
 		}
 	},
 	weed: function(data){
 		try{
-			foo.$.ajax({
+			bot.$.ajax({
 				url: 'http://www.leafly.com/api/strains',
 				type: "GET",
 				success: function(result) {
@@ -85,7 +99,7 @@ module.exports = {
 					var medical = strain.TopMedical;
 					var activity = strain.TopActivity;
 					var weed = name + ', rated: ' + rating + ', is a ' + category + ' and it has a ' + effect + ' high, try to ' + activity + '. It is best when smoked for ' + medical + '. ' + url;
-					foo.talk(weed);
+					bot.talk(weed);
 				}
 			});
 			if(debug){
@@ -93,6 +107,7 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in signal(weed)...');
+			bot.signal.error(err);
 		};
 	},
 	define: function(data){
@@ -108,7 +123,7 @@ module.exports = {
 				word = text.split( sym + 'define ');
 				var term = word[1];
 				var def = 'http://api.urbandictionary.com/v0/define?term=' + term;
-				foo.$.ajax({
+				bot.$.ajax({
 					url: def,
 					dataType: "json",
 					type: "GET",
@@ -116,26 +131,27 @@ module.exports = {
 						try{
 							var response = result.list[0].definition;
 							if(response !== undefined){
-								foo.talk(response);
+								bot.talk(response);
 							}
 						}catch(err){
-							foo.talk('no results...');
+							bot.talk('no results...');
 						}	
 					}
 				});
 			}else{
-				foo.talk('nerd mode is off...');
+				bot.talk('nerd mode is off...');
 			}
 			if(debug){
 				console.log('signal(define) running...');
 			}
 		}catch(err){
 			console.log('error in signal(define)...');
+			bot.signal.error(err);
 		}
 	},
 	party: function(data){
 		try{
-			foo.roomInfo(true, function(data){
+			bot.roomInfo(true, function(data){
 				var cur_dj = data.room.metadata.current_dj;
 				var cur_pts;
 				var name;
@@ -146,59 +162,119 @@ module.exports = {
 						var random = Math.floor(Math.random() * party.length);
 						var msg = party[random];
 						if(cur_pts == "100"){
-							foo.speak(':one: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "500"){
-							foo.speak(':five: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':five: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "1000"){
-							foo.speak(':one: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "2000"){
-							foo.speak(':two: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':two: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "3000"){
-							foo.speak(':three: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':three: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "4000"){
-							foo.speak(':four: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':four: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "5000"){
-							foo.speak(':five: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':five: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "6000"){
-							foo.speak(':six: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':six: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "7000"){
-							foo.speak(':seven: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':seven: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "8000"){
-							foo.speak(':eight: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':eight: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "9000"){
-							foo.speak(':nine: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':nine: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "10000"){
-							foo.speak(':one: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "11000"){
-							foo.speak(':one: :one: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :one: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "12000"){
-							foo.speak(':one: :two: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :two: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "13000"){
-							foo.speak(':one: :three: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :three: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "14000"){
-							foo.speak(':one: :four: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :four: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "15000"){
-							foo.speak(':one: :five: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :five: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "16000"){
-							foo.speak(':one: :six: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :six: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "17000"){
-							foo.speak(':one: :seven: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :seven: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "18000"){
-							foo.speak(':one: :eight: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :eight: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "19000"){
-							foo.speak(':one: :nine: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':one: :nine: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "20000"){
-							foo.speak(':two: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':two: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "21000"){
-							foo.speak(':two: :one: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':two: :one: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "22000"){
-							foo.speak(':two: :two: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':two: :two: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "23000"){
-							foo.speak(':two: :three: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':two: :three: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "24000"){
-							foo.speak(':two: :four: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':two: :four: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}else if(cur_pts == "25000"){
-							foo.speak(':two: :five: :zero: :zero: :zero: ' + msg + ' @' + name);
+							bot.speak(':two: :five: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "26000"){
+							bot.speak(':two: :six: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "27000"){
+							bot.speak(':two: :seven: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "28000"){
+							bot.speak(':two: :eight: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "29000"){
+							bot.speak(':two: :nine: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "30000"){
+							bot.speak(':three: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "31000"){
+							bot.speak(':three: :one: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "32000"){
+							bot.speak(':three: :two: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "33000"){
+							bot.speak(':three: :three: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "34000"){
+							bot.speak(':three: :four: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "35000"){
+							bot.speak(':three: :five: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "36000"){
+							bot.speak(':three: :six: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "37000"){
+							bot.speak(':three: :seven: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "38000"){
+							bot.speak(':three: :eight: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "39000"){
+							bot.speak(':three: :nine: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "40000"){
+							bot.speak(':four: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "41000"){
+							bot.speak(':four: :one: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "42000"){
+							bot.speak(':four: :two: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "43000"){
+							bot.speak(':four: :three: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "44000"){
+							bot.speak(':four: :four: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "45000"){
+							bot.speak(':four: :five: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "46000"){
+							bot.speak(':four: :six: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "47000"){
+							bot.speak(':four: :seven: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "48000"){
+							bot.speak(':four: :eight: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "49000"){
+							bot.speak(':four: :nine: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "50000"){
+							bot.speak(':five: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "60000"){
+							bot.speak(':six: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "70000"){
+							bot.speak(':seven: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "80000"){
+							bot.speak(':eight: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "90000"){
+							bot.speak(':nine: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
+						}else if(cur_pts == "100000"){
+							bot.speak(':one: :zero: :zero: :zero: :zero: :zero: ' + msg + ' @' + name);
 						}
 					}
 				}
@@ -208,6 +284,7 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in signal(party)...');
+			bot.signal.error(err);
 		}
 	},
 	status: function(data){
@@ -220,6 +297,9 @@ module.exports = {
 			var auto = "off";
 			var one = "off";
 			var brain = "off";
+			var annoy = "off";
+			var stat = "off";
+			var away = "off";
 			if(chatter){
 				chat = "on";
 			}
@@ -244,56 +324,75 @@ module.exports = {
 			if(nerd){
 				brain = "on";
 			}
-				foo.talk('Q mode is ' + que);
+			if(mimic){
+				annoy = "on";
+			}
+			if(stats){
+				stat = "on";
+			}
+			if(afk){
+				away = "on";
+			}
+				bot.talk('Q mode is ' + que);
 			var time0 = setTimeout(function(){
-				foo.talk('chat mode is ' + chat);
+				bot.talk('chat mode is ' + chat);
 			}, 150);
 			var time1 = setTimeout(function(){
-				foo.talk('the nuke is ' + arm);
+				bot.talk('the nuke is ' + arm);
 			}, 300);
 			var time2 = setTimeout(function(){
-				foo.talk('battle mode is ' + fight);
+				bot.talk('battle mode is ' + fight);
 			}, 450);
 			var time3 = setTimeout(function(){
-				foo.talk('debug mode is ' + bug);
+				bot.talk('debug mode is ' + bug);
 			}, 600);
 			var time4 = setTimeout(function(){
-				foo.talk('solo mode is ' + one);
+				bot.talk('solo mode is ' + one);
 			}, 750);
 			var time5 = setTimeout(function(){
-				foo.talk('nerd mode is ' + brain);
+				bot.talk('nerd mode is ' + brain);
 			}, 900);
 			var time6 = setTimeout(function(){
-				foo.talk('auto dj mode is ' + auto);
+				bot.talk('auto dj mode is ' + auto);
 			}, 1050);
+			var time7 = setTimeout(function(){
+				bot.talk('mimic mode is ' + annoy);
+			}, 1300);
+			var time8 = setTimeout(function(){
+				bot.talk('song stats are ' + stat);
+			}, 1450);
+			var time9 = setTimeout(function(){
+				bot.talk('afk watch is ' + away);
+			}, 1600);
 			if(debug){
 				console.log('signal(status) running...');
 			}
 		}catch(err){
 			console.log('error in signal(status)...');
+			bot.signal.error(err);
 		}
 	},
 	rules: function(data){
 		try{
 			if(battle == true){
-				foo.talk(rules);
+				bot.talk(rules);
 			}else if(on){
-				foo.talk(Qinfo);
+				bot.talk(Qinfo);
 			}else{		
 				setTimeout(function(){
-					foo.talk("☞ No AFK on deck! Please bop/chat");
+					bot.talk("☞ No AFK on deck! Please bop/chat");
 				},150);
 				setTimeout(function(){
-					foo.talk("☞ 8 minute song length limit");
+					bot.talk("☞ 8 minute song length limit");
 				},300);
 				setTimeout(function(){
-					foo.talk("☞Zero tolerance policy for bullshit");
+					bot.talk("☞Zero tolerance policy for bullshit");
 				},450);
 				setTimeout(function(){
-					foo.talk("☞Save the Vulgar songs til later at night (EST)");
+					bot.talk("☞Save the Vulgar songs til later at night (EST)");
 				},600);
 				setTimeout(function(){
-					foo.talk("☞Bop on stage plz!");
+					bot.talk("☞Bop on stage plz!");
 				},750);
 			}
 			if(debug){
@@ -301,6 +400,26 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in signal(rules)...');
+			bot.signal.error(err);
+		}
+	},
+	mimic: function(data){
+		if(mimic){
+			bot.speak(data.text);
+		}
+	},
+	error: function(err){
+		if (typeof err === 'object') {
+			if (err.message) {
+				console.log('\nMessage: ' + err.message)
+			}
+			if(err.stack){
+				console.log('\nStacktrace:')
+				console.log('====================')
+				console.log(err.stack);
+			}
+		}else{
+			console.log('dumpError :: argument is not an object');
 		}
 	}
 }

@@ -1,7 +1,6 @@
 ###MEDIA:
 	A.I. tumblr: http://foobar-null-42.tumblr.com/
 	foobar tweeter: https://twitter.com/f0obarbaz
-	null tweeter: https://twitter.com/_nullbot
 	fawkes tweeter: https://twitter.com/fawkesbot
 
 
@@ -185,8 +184,12 @@
 
 	+afk
 		- mark yourself as "afk" and "back"
+		-afk time limit will mark users afk 
+		-updates your activity timestamp with chat, votes, snags, and hopping on deck
+		-afk djs will be kindly escorted
+		-afk users next up in q will be moved to end of list
 		-receive log of all transmission mentioning you while you are away
-		-all afk users are skipped if in queue
+		-will remove 
 		-(/away, /back, /afks)
 
 	+dj queue
@@ -208,6 +211,12 @@
 		-automatically boot users in banlist as they enter
 		-boot anyone on command
 		-(/boot)
+	
+	+stalk
+		-finds a user's current room and comes to join them
+		
+	+thumbs down
+		-asks why someones is "downvoting" in main chat
 
 	+celebrate
 		-when users hit major milestone scores, the bot will announce it to the crowd

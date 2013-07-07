@@ -18,36 +18,36 @@ module.exports = {
 			qtrolls = [];
 			boos = [];
 			if(autodj){
-				foo.stage.auto(data);
+				bot.stage.auto(data);
 			}
 			listeners = data.room.metadata.listeners;
-			foo.song.listen(data);
+			bot.song.listen(data);
 
 			if(solo){
-				foo.roomInfo(true, function(data) {
+				bot.roomInfo(true, function(data) {
 					var djnum = data.room.metadata.djcount;
 					if(djnum < 3){
-						if(data.room.metadata.current_dj == '51958aa5eb35c1598caf8627'){
-							foo.skip();
-							foo.talk('skipping myself for solo mode...');
+						if(data.room.metadata.current_dj == botid){
+							bot.skip();
+							bot.talk('skipping myself for solo mode...');
 						}
 					}else{
 						solo = false;
-						foo.speak('solo mode is off');
+						bot.speak('solo mode is off');
 					}
 				});
 			}
 			if(on){
 				var tweets = setTimeout(function(){
-					foo.twt.post(data);
+					tweeter.post(data);
 				}, 1800000);
 			}
 			if(battle){
 				var alarm = (length - 30) * 1000;
 				voter = setTimeout(function(){
-					foo.djbattle.vote(data);
+					bot.djbattle.vote(data);
 				}, alarm);
-				foo.roomInfo(true, function(data) {
+				bot.roomInfo(true, function(data) {
 					currentDjId = data.room.metadata.current_dj;			
 				});
 				for (i in battle_djs){
@@ -60,7 +60,8 @@ module.exports = {
 				console.log('song(get) running...');
 			}
 		}catch(err){
-			console.log('error in song(get)...', err);
+			console.log('error in song(get)...');
+			bot.signal.error(err);
 		}
 	},
 	listen: function(data){
@@ -73,10 +74,10 @@ module.exports = {
 				counter++;
 			}, 1000);
 			if(counter == stuck){
-				foo.remDj(currentDjId);
-				foo.roomInfo(true, function(data) {
+				bot.remDj(currentDjId);
+				bot.roomInfo(true, function(data) {
 					var currentDjName = data.room.metadata.current_song.djname;
-					foo.speak('skipped you @' + currentDjName + ' bc ur song was stuck');
+					bot.speak('skipped you @' + currentDjName + ' bc ur song was stuck');
 				});
 			}
 			if(debug){
@@ -84,36 +85,38 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in song(listen)...');
+			bot.signal.error(err);
 		}
 	},
 	next: function(data){
 		try{
-			foo.playlistAll( function(data) {
-				foo.talk(data.list[0].metadata.song + " by " + data.list[0].metadata.artist);
+			bot.playlistAll( function(data) {
+				bot.talk(data.list[0].metadata.song + " by " + data.list[0].metadata.artist);
 			});
 			if(debug){
 				console.log('song(next) running...');
 			}
 		}catch(err){
 			console.log('error in song(next)...');
+			bot.signal.error(err);
 		}
 	},
 	snag: function(data){
 		try{
-			foo.roomInfo(true, function(data) {
-				foo.playlistAll(function(playlist){
+			bot.roomInfo(true, function(data) {
+				bot.playlistAll(function(playlist){
 				    var i = playlist.list.length;
 				    newsong = data.room.metadata.current_song._id;
 	                newsongname = songname = data.room.metadata.current_song.metadata.song;
 				    while (i--) {
 				      if (playlist.list[i]._id===newsong) {
-				        foo.talk("I already have this!");
+				        bot.talk("I already have this!");
 				        return;
 				      }
 				    }
-				    foo.talk(':musical_note: '+ artist + ' ~ ' + newsongname + ' added to my Q :musical_note:');
-				    foo.playlistAdd(newsong, playlist.list.length);
-				    foo.snag();
+				    bot.talk(':musical_note: '+ artist + ' ~ ' + newsongname + ' added to my Q :musical_note:');
+				    bot.playlistAdd(newsong, playlist.list.length);
+				    bot.snag();
 				});
 			 });
 			if(debug){
@@ -121,19 +124,20 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in song(snag)...');
+			bot.signal.error(err);
 		}
 	},
 	toss: function(data){
 		try{
-			foo.roomInfo(true, function(data) {
-				foo.playlistAll(function(playlist){
+			bot.roomInfo(true, function(data) {
+				bot.playlistAll(function(playlist){
 				    var i = playlist.list.length;
 				    newsong = data.room.metadata.current_song._id;
 	                newsongname = songname = data.room.metadata.current_song.metadata.song;
 				    while (i--) {
 				      if (playlist.list[i]._id===newsong) { 
-				      	foo.talk('/me removed ' + newsongname + ' from  its Q');
-				        foo.playlistRemove(i);
+				      	bot.talk('/me removed ' + newsongname + ' from  its Q');
+				        bot.playlistRemove(i);
 				        return;
 				      }
 				    }
@@ -144,10 +148,12 @@ module.exports = {
 			}	
 		}catch(err){
 			console.log('error in song(toss)...');
+			bot.signal.error(err);
 		}
 	},
-	snagged: function(){
+	snagged: function(data){
 		++snags;
+		bot.afk.update(data.userid);
 	},
 	theme: function(data){
 		try{
@@ -161,27 +167,29 @@ module.exports = {
 			setTheme = text.split( sym + 'set ');
 			theme = setTheme[1];
 			var settheme = setTimeout(function(){
-					foo.talk('the theme is ' + theme);
+					bot.talk('the theme is ' + theme);
 			}, 500);
 			if(debug){
 				console.log('song(theme) running...');
 			}
 		}catch(err){
 			console.log('error in song(theme)...');
+			bot.signal.error(err);
 		}
 	},
 	shuffle: function(data){
 		try{
-			foo.playlistAll(function(playlist) {
+			bot.playlistAll(function(playlist) {
 				var x = Math.ceil(Math.random() * playlist.list.length);
-				foo.playlistReorder(0, x);
-			    foo.talk("/me shuffles its playlist");
+				bot.playlistReorder(0, x);
+			    bot.talk("/me shuffles its playlist");
 			});
 			if(debug){
 				console.log('song(shuffle) running...');
 			}
 		}catch(err){
 			console.log('error in song(shuffle)...');
+			bot.signal.error(err);
 		}
 	}
 }

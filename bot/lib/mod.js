@@ -5,7 +5,7 @@ module.exports = {
 				name = curusers[i].name;
 			}
 		}
-		foo.speak('gave mod powers to @' + name + ', respect their authority!');
+		bot.speak('gave mod powers to @' + name + ', respect their authority!');
 		mods.push(data.userid);
 	},
 	give: function(data){
@@ -19,44 +19,53 @@ module.exports = {
 				mods.splice(i, 1);
 			}
 		}
-		foo.speak('removed mod powers from @' + name + ', :cry:...');
+		bot.speak('removed mod powers from @' + name + ', :cry:...');
 	},
 	cmds: function(data){
 		try{
-			var index = mods.indexOf(data.userid);
-			if(index >= 0){
-				if(data.command == 'speak'){
-					var name = name;
-					foo.talk = function(msg){
-						this.speak(msg);
-					}  
-				}else if(data.command == 'pmmed'){
-					var name = '';
-					for(i in users){
-						if(data.senderid == users[i].id){
-							name = users[i].name;
-						}
-					}
-					foo.talk = function(msg){
-						this.pm(msg, data.senderid);
+			if(data.command == 'speak'){
+				name = data.name;
+				bot.talk = function(msg){
+					this.speak(msg);
+				}  
+				if(data.userid == botid){
+					console.log('bot talking... : ' + data.text);
+					return false;
+				}
+			}else if(data.command == 'pmmed'){
+				for(i in curusers){
+					if(data.senderid == curusers[i].userid){
+						name = curusers[i].name;
 					}
 				}
+				bot.talk = function(msg){
+					this.pm(msg, data.senderid);
+				}
+				if(chatter){
+					var cb = new clever;
+					cb.write(data.text,function(resp){
+						bot.pm(resp.message, data.senderid);
+					});
+				}
+			}
+			var index = mods.indexOf(data.userid);
+			if(index >= 0){
 				var text = data.text.toLowerCase();
 				if(text.match(/\.bump/) || text.match(/\/bump/)){
 					try{
-						foo.queue.vip(data);	
+						bot.queue.vip(data);	
 					}catch(err){
 						console.log('error with mod(cmds) /bump...');
 					}
 				}else if(text.match(/\.set/) || text.match(/\/set/)){
 					try{
-						foo.song.theme(data);	
+						bot.song.theme(data);	
 					}catch(err){
 						console.log('error with mod(cmds) /set...');
 					}
 				}else if(text.match(/\.boot/) || text.match(/\/boot/)){
 					try{
-						foo.boot.pwn(data);	
+						bot.boot.pwn(data);	
 					}catch(err){
 						console.log('error with mod(cmds) /boot...');
 					}
@@ -65,164 +74,266 @@ module.exports = {
 						if(data.command == "pmmed"){
 							if(chatter){
 			        			chatter = false;
-			        			foo.talk('chat mode off');
+			        			bot.talk('chat mode off');
 				        	}else{
 				        		chatter = true;
-				        		foo.talk('chat mode on');
+				        		bot.talk('chat mode on');
 				        	}	
 				        }
 					}catch(err){
 						console.log('error with mod(cmds) /chat...');
+						bot.signal.error(err);
 					}
 				}else if(text.match(/\.auto/) || text.match(/\/auto/)){
 					try{
 						if(autodj){
 		        			autodj = false;
-		        			foo.talk('auto dj off');
+		        			bot.talk('auto dj off');
 			        	}else{
 			        		autodj = true;
-			        		foo.stage.auto(data);
-			        		foo.talk('auto dj on');
+			        		bot.stage.auto(data);
+			        		bot.talk('auto dj on');
 			        	}
 					}catch(err){
 						console.log('error with mod(cmds) /auto...');
+						bot.signal.error(err);
 					}
 				}else if(text.match(/\.nerd/) || text.match(/\/nerd/)){
 					try{
 						if(nerd){
 		        			nerd = false;
-		        			foo.talk('nerd mode off');
+		        			bot.talk('nerd mode off');
 			        	}else{
 			        		nerd = true;
-			        		foo.talk('nerd mode on');
+			        		bot.talk('nerd mode on');
 			        	}
 					}catch(err){
 						console.log('error with mod(cmds) /nerd...');
+						bot.signal.error(err);
 					}
-				}else if(text.match(/\.battle/) || text.match(/\/battle/)){
+				}else if(text.match(/\/stalk/) || text.match(/\.stalk/)){
+				try{
+					if(text.match(/.stalk/)){
+						var text = data.text;
+						var msg;
+						var index = text.indexOf('/');
+						if(index >= 0){
+							sym = '/';
+						}else{
+							sym = '.';
+						}
+						msg = text.split( sym + 'stalk');
+						var query = msg[1];
+						var id;
+						if(query !== undefined){
+							bot.getUserId(query, function(data){
+								id = data.userid;
+							});
+							setTimeout(function(){
+								bot.stalk(id, true, function(data){
+									console.log(data);
+									if(data.success == false){
+										bot.speak(data.err);
+										return;
+									}
+									bot.speak('they are hanging out in ' + data.room.name);
+									setTimeout(function(){
+										bot.speak('i\'m gonna go check it out...xD');
+									}, 500);
+									setTimeout(function(){
+										bot.speak(':v:');
+									}, 1000);
+									setTimeout(function(){
+										bot.roomDeregister();
+										bot.roomRegister(data.room.roomid);
+										bot.speak('hey there @' + query + ' , i found ya');
+									}, 1150);
+								});
+							}, 750);
+						}else if(err >= 1){
+							bot.talk('i\'m sorry @' + name + ' i cannot let you do that');
+							err = 0;
+						}
+					}
+				}catch(err){
+					console.log('error on chat(cmds) /stalk...');
+					bot.signal.error(err);
+				}
+			}else if(text.match(/\.battle/) || text.match(/\/battle/)){
 					try{
 						if(on){
-							foo.speak('teh queue is now off...');
+							bot.speak('teh queue is now off...');
 						}
 						if(battle == true){
 			        		battle = false;
 			        		stagehand = false;
 			        		poll = false;
 			        		battle_djs = [];
-			        		foo.talk('dj battle is off');
+			        		bot.talk('dj battle is off');
 			        	}else{
 			        		battle = true;
-			        		foo.djbattle.init(data);
-			        		foo.talk('dj battle is on, /rules for help');
+			        		bot.djbattle.init(data);
+			        		bot.talk('dj battle is on, /rules for help');
 			        	}
 			        }catch(err){
 			        	console.log('error with mod(cmds) /battle');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.toss/) || text.match(/\/toss/)){
 					try{
-						foo.song.toss(data);
+						bot.song.toss(data);
 			        }catch(err){
 			        	console.log('error with mod(cmds) /toss');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.djs/) || text.match(/\/djs/)){
 					try{
 						var random = Math.floor(Math.random() * memes.length);
 						msg = memes[random];
 						for(i in djs){
-							foo.pm(msg, djs[i]);	
+							bot.pm(msg, djs[i]);	
 						}
-						foo.talk('attack successful :trollface:');
+						bot.talk('attack successful :trollface:');
 			        }catch(err){
 			        	console.log('error with mod(cmds) /djs');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.queue/) || text.match(/\/queue/)){
 					try{
 						if(battle){
 							battle = false;
-							foo.speak('dj battle is now off...');
+							bot.speak('dj battle is now off...');
 						}
 						if(on){
 							on = false;
-							foo.speak('teh Q is now off...');
+							bot.speak('teh queue is now off...');
 						}
 						else{
 							on = true;
-							foo.speak('teh Q is now on. /rules for info');
+							bot.speak('the queue is now on. /rules for info');
 						}
 			        }catch(err){
 			        	console.log('error with mod(cmds) /queue');
+			        	bot.signal.error(err);
 			        }
+				}else if(text.match(/\/mimic/) || text.match(/\.mimic/)){
+					try{
+						if(mimic){
+							bot.talk('mimic mode is off...');
+							mimic = false;
+						}else{
+							bot.talk('mimic mode is on...');
+							mimic = true;
+						}
+					}catch(err){
+						console.log('error with mod(cmds) /mimc');
+						bot.signal.error(err);
+					}
+				}else if(text.match(/\/watch/) || text.match(/\.watch/)){
+					try{
+						if(afk){
+							bot.talk('afk watch mode is off...');
+							afk = false;
+						}else{
+							bot.talk('afk watch mode is on...');
+							afk = true;
+						}
+					}catch(err){
+						console.log('error with mod(cmds) /watch');
+						bot.signal.error(err);
+					}
 				}else if(text.match(/\.getup/) || text.match(/\/getup/)){
 					try{
-						foo.addDj();
+						bot.addDj();
 			        }catch(err){
 			        	console.log('error with mod(cmds) /up');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.debug/) || text.match(/\/debug/)){
 					try{
 						if(debug){
 							debug = false;
-							foo.talk('debugging off...');
+							bot.talk('debugging off...');
 						}else{
 							debug = true;
-							foo.talk('debugging on...');
+							bot.talk('debugging on...');
 						}
 			        }catch(err){
 			        	console.log('error with mod(cmds) /debug');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.getdown/) || text.match(/\/getdown/)){
 					try{
-						foo.remDj();
+						bot.remDj();
 			        }catch(err){
 			        	console.log('error with mod(cmds) /down');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.skip/) || text.match(/\/skip/)){
 					try{
-						foo.skip();
+						bot.skip();
 			        }catch(err){
 			        	console.log('error with mod(cmds) /skip');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.snag/) || text.match(/\/snag/)){
 					try{
-						foo.song.snag(data);
+						bot.song.snag(data);
 			        }catch(err){
 			        	console.log('error with mod(cmds) /snag');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.shuffle/) || text.match(/\/shuffle/)){
 					try{
-						foo.song.shuffle(data);
+						bot.song.shuffle(data);
 			        }catch(err){
 			        	console.log('error with mod(cmds) /shuffle');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.trollcop/) || text.match(/\/trollcop/)){
 					try{
-						if(data.userid !== '51958aa5eb35c1598caf8627'){
+						if(data.userid !== botid){
 							if(on){
 								if(troll){
 					        		troll = false;
-					        		foo.talk('troll :cop: is off');
+					        		bot.talk('troll :cop: is off');
 					        	}else{
 					        		troll = true;
-					        		foo.talk('troll :cop: is on');
+					        		bot.talk('troll :cop: is on');
 					        	}
 							}else{
-								foo.talk('no need for :cop: right now...');
+								bot.talk('no need for :cop: right now...');
 							}
 				        }
 			        }catch(err){
 			        	console.log('error with mod(cmds) troll:cop:');
+			        	bot.signal.error(err);
+			        }
+				}else if(text.match(/\.stats/) || text.match(/\/stats/)){
+					try{
+						if(stats){
+			        		stats = false;
+			        		bot.talk('song stats are off');
+			        	}else{
+			        		stats = true;
+			        		bot.talk('song stats are on');
+			        	}   
+			        }catch(err){
+			        	console.log('error with mod(cmds) /stats');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.armed/) || text.match(/\/armed/)){
 					try{
 						if(armed){
 			        		armed = false;
-			        		foo.talk('nuke is on standby');
+			        		bot.talk('nuke is on standby');
 			        	}else{
 			        		armed = true;
-			        		foo.talk('nuke is armed');
+			        		bot.talk('nuke is armed');
 			        	}
 			        }catch(err){
 			        	console.log('error with mod(cmds) /armed');
+			        	bot.signal.error(err);
 			        }
 				}else if(text.match(/\.tweeter/) || text.match(/\/tweeter/)){
 					try{
@@ -241,32 +352,34 @@ module.exports = {
 							tweeter.post('statuses/update', {
 								status: trend + twit + mention
 							}, function(err, reply) {console.log(err, reply);});
-							foo.talk('https://twitter.com/f0obarbaz');
+							bot.talk('https://twitter.com/f0obarbaz');
 						}else if(err >= 1){
-							foo.talk('i\'m sorry @' + name + ' i cannot let you do that');
+							bot.talk('i\'m sorry @' + name + ' i cannot let you do that');
 							err = 0;
 						}
 					}catch(err){
 						console.log('error in mod(cmds) /tweeter...');
+						bot.signal.error(err);
 					}
 				}else if(text.match(/\.solo/) || text.match(/\/solo/)){
 					try{
-						foo.roomInfo(true, function(data) {
+						bot.roomInfo(true, function(data) {
 							var djnum = data.room.metadata.djcount;
 							if(djnum <= 2){
 								if(solo){
 					        		solo = false;
-					        		foo.talk('solo mode is off');
+					        		bot.talk('solo mode is off');
 					        	}else{
 					        		solo = true;
-					        		foo.talk('solo mode is on');
+					        		bot.talk('solo mode is on');
 					        	}
 					        }else{
-					        	foo.speak('there are other djs on deck...');
+					        	bot.speak('there are other djs on deck...');
 					        }
 					    });
 			        }catch(err){
 			        	console.log('error with mod(cmds) /solo');
+			        	bot.signal.error(err);
 			        }
 				}
 			}
@@ -275,6 +388,7 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in mod(cmds)...');
+			bot.signal.error(err);
 		}
 	}
 }

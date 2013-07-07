@@ -6,50 +6,60 @@ module.exports = {
 					case 'speak':
 						for(i in djs){
 							if(djs[i] == data.userid){
-								foo.talk('You\'re DJing... @' + name);
+								bot.talk('You\'re DJing... @' + name);
 								return false;
 							}
 						}
 						for(i in q){
 							if(q[i].id == data.userid){
-								foo.talk('You\'re in teh Q already @' + name);
+								bot.talk('You\'re in the queue already @' + name);
 								return false;
 							}
 						}
 						q.push({name:data.name, id:data.userid});
-							foo.talk('You\'re #' + q.length + ' in teh Q. @' + name);
+						bot.talk('You\'re #' + q.length + ' in the queue. @' + name);
 						if(q.length > 0  && djs.length < 5) {
-							foo.signal.call(data);
+							var callout = setTimeout(function(){
+								bot.signal.call(data);
+							}, 500);
 						}
 					break;
 					case 'pmmed':
+						for(i in users){
+							if(users[i].id == data.senderid){
+								users[i].name = name;
+							}
+						}
 						for(i in djs){
 							if(djs[i] == data.senderid){
-								foo.talk('You\'re DJing... @' + name);
+								bot.talk('You\'re DJing... @' + name);
 								return false;
 							}
 						}
 						for(i in q){
 							if(q[i].id == data.senderid){
-								foo.talk('You\'re in teh Q already @' + name);
+								bot.talk('You\'re in the queue already @' + name);
 								return false;
 							}
 						}
-						q.push({name:data.name, id:data.senderid});
-							foo.talk('You\'re #' + q.length + ' in teh Q. @' + name);
+						q.push({name:name, id:data.senderid});
+						bot.talk('You\'re #' + q.length + ' in the queue. @' + name);
 						if(q.length > 0  && djs.length < 5) {
-							foo.signal.call(data);
+							var callout = setTimeout(function(){
+								bot.signal.call(data);
+							}, 500);
 						}
 					break;
 				}
 			}else{
-				foo.talk('teh Q is now off.');
+				bot.talk('the queue is now off.');
 			}
 			if(debug){
 				console.log('q(add) running...');
 			}
 		}catch(err){
 			console.log('error in q(add)...');
+			bot.signal.error(err);
 		}
 	},
 	remove: function(data){
@@ -64,17 +74,18 @@ module.exports = {
 					}
 	                if (q[i].id == id){
 	                    q.splice(i, 1);
-	                    foo.talk('You\'re deleted from teh Q. @' + name);
+	                    bot.talk('You\'re deleted from the queue. @' + name);
 	                }
 	            }
 			}else{
-				foo.talk('teh Q is now off.');
+				bot.talk('the queue is now off.');
 			}
 			if(debug){
 				console.log('q(remove) running...');
 			}
 		}catch(err){
 			console.log('error in q(remove)...');
+			bot.signal.error(err);
 		}
 	},
 	position: function(data){
@@ -91,7 +102,7 @@ module.exports = {
 			        	id = data.userid;
 			        }
 			        if (q[i].id == id) {
-			            foo.talk('You\'re ' + j + '/' + qlen + ' @' + name);
+			            bot.talk('You\'re ' + j + '/' + qlen + ' @' + name);
 			        }
 			    }
 			}
@@ -100,6 +111,7 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in q(position)...');
+			bot.signal.error(err);
 		}
 	},
 	print: function(){
@@ -112,18 +124,19 @@ module.exports = {
 		                j++;
 		                str += (' ' + q[i].name + '[' + j + '], ');
 		            }
-		            foo.talk(str.substring(0, str.length - 2));
+		            bot.talk(str.substring(0, str.length - 2));
 		        }else{
-		        	foo.talk('teh Q is empty...');
+		        	bot.talk('the queue is empty...');
 		        }
 			}else{
-				foo.talk('teh Q is off');
+				bot.talk('the queue is off');
 			}
 			if(debug){
 				console.log('q(print) running...');
 			}
 		}catch(err){
 			console.log('error in q(print)...');
+			bot.signal.error(err);
 		}
 	},
 	vip: function(data){
@@ -138,14 +151,14 @@ module.exports = {
 			vip = text.split( sym + 'bump ');
 			var name = vip[1];
 			if(vip[1] !== undefined){
-				foo.getUserId(name, function(data){
+				bot.getUserId(name, function(data){
 					var vipId = data.userid;
 					for (i in q) {
 		        		if (q[i].id == vipId) {
 		           			name = q[i].name;
 		           			q.splice(i, 1);
 							q.unshift({name:name, id:vipId});
-							foo.speak('@' + name +' has been moved to the front of the line.');
+							bot.speak('@' + name +' has been moved to the front of the line.');
 						}
 					}
 				});
@@ -155,6 +168,7 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in q(vip)...');
+			bot.signal.error(err);
 		}
 	}
 }

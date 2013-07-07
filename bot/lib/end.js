@@ -4,15 +4,19 @@ module.exports = {
 			var djId = data.room.metadata.current_dj;
 			var djcount = data.room.metadata.djcount;
 			if(on){	
-				foo.remDj(djId);
+				bot.remDj(djId);
 				delete djs[djId];
 				currentsong = "";
 			}
-			foo.speak(':thumbsup:'+ ups +' :thumbsdown:'+ downs +' :heart:' + snags);
+			var title = data.room.metadata.current_song.metadata.song;
+			var artist = data.room.metadata.current_song.metadata.artist;
+			if(stats){
+				bot.speak(title + ' by ' + artist + ' got ' + ups + ':thumbsup: ' + downs + ':thumbsdown: ' + snags + ':heart:');
+			}
 			snags = 0;
 			if(battle){
-				clearTimeout(voter);
 				if(poll){
+				clearTimeout(voter);
 					if(battle_djs.length > 1){
 						count++;
 						poll = false;
@@ -22,36 +26,36 @@ module.exports = {
 							voters = [];
 							if(dj1.votes > dj2.votes){
 								winner = dj1.name;
-								foo.speak(dj1.name + ' wins!');
+								bot.speak(dj1.name + ' wins!');
 								++battle_djs[0].win;
 								++battle_djs[1].lose;
 								setTimeout(function(){
-									foo.speak('@' + dj2.name + ' has lost & is getting ze :boot:');
+									bot.speak('@' + dj2.name + ' has lost & is getting ze :boot:');
 								}, 500);
 								setTimeout(function(){
-									foo.remDj(dj2.id);
+									bot.remDj(dj2.id);
 									battle_djs.splice(dj2.id, 1);
 								}, 750);
 								setTimeout(function(){
-									foo.djbattle.call(data);
+									bot.djbattle.call(data);
 								}, 1000);		
 							}else if(dj1.votes < dj2.votes){
 								winner = dj2.name;
-								foo.speak(dj2.name + ' wins!');
+								bot.speak(dj2.name + ' wins!');
 								++battle_djs[1].win;
 								++battle_djs[0].lose;
 								setTimeout(function(){
-									foo.speak('@' + dj1.name + ' has lost & is getting ze :boot:');
+									bot.speak('@' + dj1.name + ' has lost & is getting ze :boot:');
 								}, 500);
 								setTimeout(function(){
-									foo.remDj(dj1.id);
+									bot.remDj(dj1.id);
 									battle_djs.splice(dj1.id, 1);
 								}, 750);
 								setTimeout(function(){
-									foo.djbattle.call(data);
+									bot.djbattle.call(data);
 								}, 1000);
 							}else if(dj1.votes == dj2.votes){
-								foo.speak('@' + dj1.name + ' and @' + dj2.name + ' are tied!');
+								bot.speak('@' + dj1.name + ' and @' + dj2.name + ' are tied!');
 								battle_djs[0].votes = 0;
 								battle_djs[1].votes = 0;
 								battle_djs[0].songs = 0;
@@ -68,7 +72,8 @@ module.exports = {
 				console.log('end(get) running...');
 			}
 		}catch(err){
-			console.log('error in end(get)...', err);
+			console.log('error in end(get)...');
+			bot.signal.error(err);
 		}
 	}
 }

@@ -5,7 +5,7 @@ module.exports = {
 				switch(data.text){
 					case '+1':
 					if(data.userid == currentDjId){
-						foo.speak('you can\'t vote for yourself @' + data.name);
+						bot.speak('you can\'t vote for yourself @' + data.name);
 						return;
 					}
 					var index = voters.indexOf(data.userid);
@@ -14,9 +14,9 @@ module.exports = {
 							if(currentDjId == battle_djs[i].id){
 								voters.push(data.userid);
 								++battle_djs[i].votes;
-								foo.speak(battle_djs[0].name + ': ' + battle_djs[0].votes);
+								bot.speak(battle_djs[0].name + ': ' + battle_djs[0].votes);
 								setTimeout(function(){
-									foo.speak(battle_djs[1].name + ': ' + battle_djs[1].votes);
+									bot.speak(battle_djs[1].name + ': ' + battle_djs[1].votes);
 								}, 250);
 							}
 						}
@@ -29,12 +29,12 @@ module.exports = {
 			}
 			if(data.command == 'speak'){
 				name = data.name;
-				foo.talk = function(msg){
+				bot.talk = function(msg){
 					this.speak(msg);
 				}  
-				if(data.userid == '51958aa5eb35c1598caf8627' || data.userid == '51785f4baaa5cd1833b1d746'){
-					console.log('bot talking... : ' + data.text);
-					return;
+				if(data.userid == botid){
+					console.log('> bot talking... : ' + data.text);
+					return false;
 				}
 			}else if(data.command == 'pmmed'){
 				for(i in curusers){
@@ -42,67 +42,73 @@ module.exports = {
 						name = curusers[i].name;
 					}
 				}
-				foo.talk = function(msg){
+				bot.talk = function(msg){
 					this.pm(msg, data.senderid);
 				}
 				if(chatter){
 					var cb = new clever;
 					cb.write(data.text,function(resp){
-						foo.pm(resp.message, data.senderid);
+						bot.pm(resp.message, data.senderid);
 					});
 				}
 			}
 			text = data.text.toLowerCase();
-			foo.afk.give(data);
-			foo.logs.listen(data);
-			foo.mod.cmds(data);
+			bot.afk.give(data);
+			bot.afk.update(data.userid);
+			bot.logs.listen(data);
+			bot.mod.cmds(data);
 			if(text.match(/\/away/) || text.match(/\.away/) || text.match(/brb/)){
 				try{
-					foo.afk.get(data);
+					bot.afk.get(data);
 				}catch(err){
-					console.log('error on chat(cmds) /away...', err);
+					console.log('error on chat(cmds) /away...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/afks/) || text.match(/\.afks/)){
 				try{
-					foo.afk.print(data);
+					bot.afk.print(data);
 				}catch(err){
-					console.log('error on chat(cmds) /afks...', err);
+					console.log('error on chat(cmds) /afks...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/fanme/) || text.match(/\.fanme/)){
 				try{
-					foo.becomeFan(data.userid, function(res) {
+					bot.becomeFan(data.userid, function(res) {
 						if(res.success){
-							foo.becomeFan(data.userid);
+							bot.becomeFan(data.userid);
 						}else{
-							foo.talk('I already fanned u @' + name);
+							bot.talk('I already fanned u @' + name);
 						}
 					});
 				}catch(err){
-					console.log('error on chat(cmds) /fanme...', err);
+					console.log('error on chat(cmds) /fanme...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/rules/) || text.match(/\.rules/)){
 				try{
-					foo.signal.rules(data);
+					bot.signal.rules(data);
 				}catch(err){
-					console.log('error on chat(cmds) /rules...', err);
+					console.log('error on chat(cmds) /rules...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/add/) || text.match(/\.add/)){
 				try{
 					if(battle){
 						for(i in battle_djs){
 							if(battle_djs[i].id == data.userid){
-								foo.talk('you\'re already signed up @' + name);
+								bot.talk('you\'re already signed up @' + name);
 								return false;
 							}
 						}
-						foo.djbattle.add(data);
+						bot.djbattle.add(data);
 					}else if(on){
-						foo.queue.add(data);
+						bot.queue.add(data);
 					}else{
-						foo.talk('it\'s ffa, grab a spot or ask someone to hop down...');
+						bot.talk('it\'s ffa, grab a spot or ask someone to hop down...');
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /add...', err);
+					console.log('error on chat(cmds) /add...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/remove/) || text.match(/\.remove/)){
 				try{
@@ -116,16 +122,17 @@ module.exports = {
 							}
 							if(battle_djs[i].id == id){
 								battle_djs.splice(i, 1);
-								foo.talk('@' + name + ' you have been removed from the battle list');
+								bot.talk('@' + name + ' you have been removed from the battle list');
 							}
 						}
 					}else if(on){
-						foo.queue.remove(data);
+						bot.queue.remove(data);
 					}else{
-						foo.talk('it\'s ffa, grab a spot or ask someone to hop down...');
+						bot.talk('it\'s ffa, grab a spot or ask someone to hop down...');
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /remove...', err);
+					console.log('error on chat(cmds) /remove...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/nuke/) || text.match(/\.nuke/)){
 				try{
@@ -140,255 +147,280 @@ module.exports = {
 							}
 						}
 						if(clear){
-							foo.talk('teh launch codes pl0x?');
-							foo.nuke.check();
+							bot.talk('teh launch codes pl0x?');
+							bot.nuke.check();
 						}else{
-							foo.talk('you do not have proper clearance @' + name);
+							bot.talk('you do not have proper clearance @' + name);
 						}
 					}else{
-						if(data.userid == '51958aa5eb35c1598caf8627' || data.userid == '51785f4baaa5cd1833b1d746'){
-							console.log('bot talking to bot...', err);
+						if(data.userid == botid){
+							console.log('bot talking to bot...');
+							bot.signal.error(err);
 						}else{
-							foo.talk(':trollface:', data.userid);
+							bot.talk(':trollface:', data.userid);
 						}	
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /nuke...', err);
+					console.log('error on chat(cmds) /nuke...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/next/) || text.match(/\.next/)){
 				try{
-					foo.song.next(data);
+					bot.song.next(data);
 				}catch(err){
-					console.log('error on chat(cmds) /next...', err);
+					console.log('error on chat(cmds) /next...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/mc/) || text.match(/\.mc/)){
 				try{
-					foo.talk('http://i.qkme.me/3oybjp.jpg');
+					bot.talk('http://i.qkme.me/3oybjp.jpg');
 				}catch(err){
-					console.log('error on chat(cmds) /mc...', err);
+					console.log('error on chat(cmds) /mc...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/meow/) || text.match(/\.meow/)){
 				try{
-					foo.roomInfo(true, function(data) {
+					bot.roomInfo(true, function(data) {
 						var currentDjName = data.room.metadata.current_song.djname;
-						foo.speak('>^..^< @' + currentDjName);
+						bot.speak('>^..^< @' + currentDjName);
 					});
 				}catch(err){
-					console.log('error on chat(cmds) /meow...', err);
+					console.log('error on chat(cmds) /meow...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/props/) || text.match(/\.props/)){
 				try{
 					var index = sirs.indexOf(data.userid);
 					if(index == -1){
-						foo.roomInfo(true, function(data) {
+						bot.roomInfo(true, function(data) {
 							var currentDjName = data.room.metadata.current_song.djname;
-							foo.speak(':clap: @' + currentDjName);
+							bot.speak(':clap: @' + currentDjName);
 							sirs.push(data.userid);
 						});
 					}
 					else{
-						foo.talk('stop being a :trollface:');
+						bot.talk('stop being a :trollface:');
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /props...', err);
+					console.log('error on chat(cmds) /props...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/umad?/) || text.match(/\.umad?/)){
 				try{
-					foo.signal.random(memes, msg);
+					bot.signal.random(memes, msg);
 				}catch(err){
-					console.log('error on chat(cmds) /umad?...', err);
+					console.log('error on chat(cmds) /umad?...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/molly/) || text.match(/\.molly/)){
 				try{
-					foo.signal.random(molly, msg);
+					bot.signal.random(molly, msg);
 				}catch(err){
-					console.log('error on chat(cmds) /molly...', err);
+					console.log('error on chat(cmds) /molly...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/cispa/) || text.match(/\.cispa/)){
 				try{
-					foo.signal.random(actions, msg);
+					bot.signal.random(actions, msg);
 				}catch(err){
-					console.log('error on chat(cmds) /cispa...', err);
+					console.log('error on chat(cmds) /cispa...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/rage/) || text.match(/\.rage/)){
 				try{
 					var index = ragers.indexOf(data.userid);
 					if(index == -1){	
-						foo.roomInfo(true, function(data) {
+						bot.roomInfo(true, function(data) {
 							var currentDjName = data.room.metadata.current_song.djname;
-							foo.talk("(╯°□°)╯︵ @" + currentDjName);
+							bot.talk("(╯°□°)╯︵ @" + currentDjName);
 					        var raging = setTimeout(function(){
-					            foo.speak("http://goo.gl/eZH5r");
+					            bot.speak("http://goo.gl/eZH5r");
 					        }, 300);
 						});
 						ragers.push(data.userid);		
 					}
 					else{
-						foo.talk('stop being a :trollface: @' + name);
+						bot.talk('stop being a :trollface: @' + name);
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /rage...', err);
+					console.log('error on chat(cmds) /rage...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/fact/) || text.match(/\.fact/)){
 				try{
-					foo.signal.random(facts, msg);
+					bot.signal.random(facts, msg);
 				}catch(err){
-					console.log('error on chat(cmds) /fact...', err);
+					console.log('error on chat(cmds) /fact...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/quote/) || text.match(/\.quote/)){
 				try{
 					if(nerd){
-						foo.$.ajax({
+						bot.$.ajax({
 							url: 'http://iheartquotes.com/api/v1/random?source=liberty+forrestgump+xfiles+futurama+simpsons_chalkboard+starwars+hitchhiker',
 							dataType: "json",
 							type: "GET",
 							success: function(result){
-								foo.talk(result);
+								bot.talk(result);
 							},
 							error: function(err){
-								foo.talk(err.responseText);
+								bot.talk(err.responseText);
 							}
 						});
 					}else{
-						foo.talk('nerd mode is off...');
+						bot.talk('nerd mode is off...');
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /quote...', err);
+					console.log('error on chat(cmds) /quote...');
+					bot.signal.error(err);
 				}		
 			}else if(text.match(/\/cats/) || text.match(/\.cats/)){
 				try{
-					foo.$.ajax({
+					bot.$.ajax({
 						url: 'http://catfacts.nodester.com/',
 						dataType: "json",
 						type: "GET",
 						success: function(result) {
-							foo.talk(result.catFacts);
+							bot.talk(result.catFacts);
 						}
 					});
 				}catch(err){
-					console.log('error on chat(cmds) /cats...', err);
+					console.log('error on chat(cmds) /cats...');
+					bot.signal.error(err);
 				}		
 			}else if(text.match(/\/9001/) || text.match(/\.9001/)){
 				try{
 					var index = ragers.indexOf(data.userid);
 					if(index == -1){
-						foo.speak("┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻");
+						bot.speak("┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻");
 						ragers.push(data.userid);		
 					}
 					else{
-						foo.talk('y u so mean? @' + name);
+						bot.talk('y u so mean? @' + name);
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /9001...', err);
+					console.log('error on chat(cmds) /9001...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/quakes/) || text.match(/\.quakes/)){
 				try{
-					foo.$.ajax({
+					bot.$.ajax({
 						url: 'http://www.seismi.org/api/eqs?limit=3',
 						dataType: "json",
 						type: "GET",
 						success: function(result) {
 							var quakes = result.earthquakes;
-								foo.talk(quakes[0].region + " had a " + quakes[0].magnitude + " quake @" + quakes[0].timedate);
+								bot.talk(quakes[0].region + " had a " + quakes[0].magnitude + " quake @" + quakes[0].timedate);
 							setTimeout(function(){
-								foo.talk(quakes[1].region + " had a " + quakes[1].magnitude + " quake @" + quakes[1].timedate);
+								bot.talk(quakes[1].region + " had a " + quakes[1].magnitude + " quake @" + quakes[1].timedate);
 							});
 							setTimeout(function(){
-								foo.talk(quakes[2].region + " had a " + quakes[2].magnitude + " quake @" + quakes[2].timedate);
+								bot.talk(quakes[2].region + " had a " + quakes[2].magnitude + " quake @" + quakes[2].timedate);
 							});
 						}
 					});
 				}catch(err){
-					console.log('error on chat(cmds) /quakes...', err);
+					console.log('error on chat(cmds) /quakes...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/hump/) || text.match(/\.hump/)){
 				try{
-					foo.hump.cannon(data);
+					bot.hump.cannon(data);
 				}catch(err){
-					console.log('error on chat(cmds) /hump...', err);
+					console.log('error on chat(cmds) /hump...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/spud/) || text.match(/\.spud/)){
 				try{
-					foo.spud.cannon(data);
+					bot.spud.cannon(data);
 				}catch(err){
-					console.log('error on chat(cmds) /spud...', err);
+					console.log('error on chat(cmds) /spud...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/tpb/) || text.match(/\.tpb/)){
 				try{
-					foo.signal.random(tpb, msg);
+					bot.signal.random(tpb, msg);
 				}catch(err){
-					console.log('error on chat(cmds) /tpb...', err);
+					console.log('error on chat(cmds) /tpb...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/tank/) || text.match(/\.tank/)){
 				try{
-					foo.talk('●████▄▄▄▄▄▄▄▄▄▄▄ ▄▄▅████████▅▄▃▂ ██████████████████► ◥☼▲⊙▲⊙▲⊙▲⊙▲⊙▲☼◤');
+					bot.talk('●████▄▄▄▄▄▄▄▄▄▄▄ ▄▄▅████████▅▄▃▂ ██████████████████► ◥☼▲⊙▲⊙▲⊙▲⊙▲⊙▲☼◤');
 				}catch(err){
-					console.log('error on chat(cmds) /tank...', err);
+					console.log('error on chat(cmds) /tank...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/schlong/) || text.match(/\.schlong/)){
 				try{
-					foo.schlong.fight(data);
+					bot.schlong.fight(data);
 				}catch(err){
-					console.log('error on chat(cmds) /schlong...', err);
+					console.log('error on chat(cmds) /schlong...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/album/) || text.match(/\.album/)){
 				try{
-					foo.talk('title: ' + title);
+					bot.talk('title: ' + title);
 					var album1 = setTimeout(function () { 
-						foo.talk('artist: ' + artist);
+						bot.talk('artist: ' + artist);
 					}, 150);
 					var album2 = setTimeout(function () { 
-						foo.talk('album: ' + album);
+						bot.talk('album: ' + album);
 					}, 300);
 					var album3 = setTimeout(function () { 
-						foo.talk('cover art: ' + cover);
+						bot.talk('cover art: ' + cover);
 					}, 450);
 					var album4 = setTimeout(function () { 
-						foo.talk('date: ' + date);
+						bot.talk('date: ' + date);
 					}, 600);
 				}catch(err){
-					console.log('error on chat(cmds) /album...', err);
+					console.log('error on chat(cmds) /album...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/rps/) || text.match(/\.rps/)){
 				try{
-					foo.rps.shoot(data);
+					bot.rps.shoot(data);
 				}catch(err){
-					console.log('error on chat(cmds) /rps...', err);
+					console.log('error on chat(cmds) /rps...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/theme/) || text.match(/\.theme/)){
 				try{
 					if(theme == ''){
-						foo.talk('feel free to play what you like, but check the .rules');
+						bot.talk('feel free to play what you like, but check the .rules');
 					}else{
-						foo.talk('the theme is ' + theme);
+						bot.talk('the theme is ' + theme);
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /theme...', err);
+					console.log('error on chat(cmds) /theme...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/pos/gi) || text.match(/\.pos/)){
 				try{
 					if(on){
-						foo.queue.position(data);
+						bot.queue.position(data);
 					}
 				}catch(err){
-					console.log('error on chat(cmds) .q...', err);
+					console.log('error on chat(cmds) .q...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/list/) || text.match(/\.list/)){
 				try{
 					if(on){
-						foo.queue.print();
+						bot.queue.print();
 					}else if(battle){
-						foo.djbattle.print();
+						bot.djbattle.print();
 					}
 					else{
-						foo.talk('it\'s ffa, grab a spot or ask someone to hop down...');
+						bot.talk('it\'s ffa, grab a spot or ask someone to hop down...');
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /print...', err);
+					console.log('error on chat(cmds) /print...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/help/) || text.match(/\.help/)){
 				try{
-					if(data.userid !== '51785f4baaa5cd1833b1d746' || data.senderid !== '51785f4baaa5cd1833b1d746'){
+					if(data.userid !== botid || data.senderid !== botid){
 						var helpmsg = '';
 						var index = mods.indexOf(data.userid);
 						var str = 'type "." or "/" before ';
@@ -399,74 +431,81 @@ module.exports = {
 						}else{
 							helpmsg = str + chatCommands;
 						}
-						foo.talk(helpmsg);
+						bot.talk(helpmsg);
 					}	
 				}catch(err){
-					console.log('error on chat(cmds) /help...', err);
+					console.log('error on chat(cmds) /help...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/joke/) || text.match(/\.joke/)){
 				try{
-					foo.$.ajax({
+					bot.$.ajax({
 						url: 'http://iheartquotes.com/api/v1/random?source=riddles',
 						dataType: "json",
 						type: "GET",
 						success: function(result){
-							foo.talk(result);
+							bot.talk(result);
 						},
 						error: function(err){
-							foo.talk(err.responseText);
+							bot.talk(err.responseText);
 						}
 					});
 				}catch(err){
-					console.log('error on chat(cmds) /quote...', err);
+					console.log('error on chat(cmds) /quote...');
+					bot.signal.error(err);
 				}		
 			}else if(text.match(/\/weed/) || text.match(/\.weed/)){
 				try{
-					foo.signal.weed(data);
+					bot.signal.weed(data);
 				}catch(err){
-					console.log('error on chat(cmds) /weed...', err);
+					console.log('error on chat(cmds) /weed...');
+					bot.signal.error(err);
 				}	
 			}else if(text.match(/\/blame/) || text.match(/\.blame/)){
 				try{
-					foo.talk('/whatever');
+					bot.talk('/whatever');
 				}catch(err){
-					console.log('error on chat(cmds) /blame...', err);
+					console.log('error on chat(cmds) /blame...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/thanks/) || text.match(/\.thanks/)){
 				try{
-					foo.talk(':) you\'re welcome @'+ name);
+					bot.talk(':) you\'re welcome @'+ name);
 				}catch(err){
-					console.log('error on chat(cmds) /thanks...', err);
+					console.log('error on chat(cmds) /thanks...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/dive/) || text.match(/\.dive/)){
 				try{
-					foo.remDj(data.userid);
+					bot.remDj(data.userid);
 				}catch(err){
-					console.log('error on chat(cmds) /dive...', err);
+					console.log('error on chat(cmds) /dive...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\/bop/) || text.match(/\.bop/) || text.match(/\/dance/) || text.match(/\.dance/)){
 				try{
 					switch(data.userid || data.senderid){
-						case 'xxx'://dance with vip
-							foo.talk('/me bops with @' + name);
+						case 'xxxx'://dance with vip
+							bot.talk('/me bops with @' + name);
 						break;
 						default:
-							foo.signal.random(boppin, msg);
+							bot.signal.random(boppin, msg);
 						break;
 					}
-					foo.bop();
+					bot.bop();
 				}catch(err){
-					console.log('error on chat(cmds) /dance...', err);
+					console.log('error on chat(cmds) /dance...');
+					bot.signal.error(err);
 				}
 			}else if(text.match(/\.status/) || text.match(/\/status/)){
 				try{
-					foo.signal.status(data);
+					bot.signal.status(data);
 				}catch(err){
 					console.log('error on chat(cmds) /status');
 				}
 			}else if(text.match(/\.define/) || text.match(/\/define/)){
 				try{
-					foo.signal.define(data);
+					bot.signal.define(data);
 				}catch(err){
 					console.log('error in chat(cmds) /define');
 				}
@@ -485,19 +524,22 @@ module.exports = {
 						if(item !== undefined){
 							var search = item.replace(/ /g,'+');
 							var ggl = 'http://lmgtfy.com/?q=' + search;
-							foo.talk(ggl);
+							bot.talk(ggl);
 						}else if(err >= 1){
-							foo.talk('i\'m sorry @' + name + ' i cannot let you do that');
+							bot.talk('i\'m sorry @' + name + ' i cannot let you do that');
 							err = 0;
 						}
 					}
 				}catch(err){
-					console.log('error on chat(cmds) /google...', err);
+					console.log('error on chat(cmds) /google...');
+					bot.signal.error(err);
 				}
 			}
-			foo.afk.listen(data);
+			bot.signal.mimic(data);
+			bot.afk.listen(data);
 		}catch(err){
-			console.log('error in chat.js...', err);
+			console.log('error in chat.js...');
+			bot.signal.error(err);
 		}	
 		if(debug){
 			console.log('chat(cmds) running...');

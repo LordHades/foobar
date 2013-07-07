@@ -19,7 +19,7 @@ module.exports = {
 					sShaft += '=';
 					sDSize--;
 				}
-				foo.speak('@' + name + "'s schlong is 8" + sShaft + 'D ' + sDInches + " Inches!" + ', or ' + sDCm + ' Centimeters!');
+				bot.speak('@' + name + "'s schlong is 8" + sShaft + 'D ' + sDInches + " Inches!" + ', or ' + sDCm + ' Centimeters!');
 				schlongs.push(data.userid);
 				schlongGame.push({name: name, id:data.id, in:sDInches, cm:sDCm});
 				weiners.push(sDInches);
@@ -32,7 +32,7 @@ module.exports = {
 								var weiner = Math.max.apply(Math, weiners);
 								for(i in schlongGame){
 									if(weiner == schlongGame[i].in){
-										foo.speak('@' + schlongGame[i].name + "'s " + weiner + " inch .schlong wins a :trophy:");
+										bot.speak('@' + schlongGame[i].name + "'s " + weiner + " inch .schlong wins a :trophy:");
 									}
 								}
 							}
@@ -43,13 +43,14 @@ module.exports = {
 				}
 
 			}else{
-				foo.speak('stop being a :trollface: @' + name + ' get used to the .schlong u were born with');
+				bot.speak('stop being a :trollface: @' + name + ' get used to the .schlong u were born with');
 			}
 			if(debug){
 				console.log('schlong(fight) running...');
 			}
 		}catch(err){
 			console.log('error in schlong(fight)...');
+			bot.signal.error(err);
 		}
 	}
 }

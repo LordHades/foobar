@@ -4,7 +4,7 @@ module.exports = {
 			var user = data.user[0];
 			for(i in bans){
 				if(user.userid == bans[i]){
-					foo.bootUser(user.userid, 'Pew Pew Pew');
+					bot.bootUser(user.userid, 'Pew Pew Pew');
 					break;
 				}
 			}
@@ -12,7 +12,8 @@ module.exports = {
 				console.log('boot(kick) running...');
 			}
 		}catch(err){
-			console.log('error in boot(kick)...', err);
+			console.log('error in boot(kick)...');
+			bot.signal.error(err);
 		}
 	},
 	pwn: function(data){
@@ -27,16 +28,17 @@ module.exports = {
 			pwn = text.split( sym + 'boot ');
 			var name = pwn[1];
 			if(name !== undefined){
-				foo.getUserId(name, function(data){
+				bot.getUserId(name, function(data){
 					var pwnId = data.userid;
-		        	foo.bootUser(pwnId, 'Pew Pew Pew');
+		        	bot.bootUser(pwnId, 'Pew Pew Pew');
 				});
 			}
 			if(debug){
 				console.log('boot(pwn) running...');
 			}
 		}catch(err){
-			console.log('error in boot(pwn)...', err);
+			console.log('error in boot(pwn)...');
+			bot.signal.error(err);
 		}
 	}
 }

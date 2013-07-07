@@ -1,7 +1,7 @@
 module.exports = {
 	post: function(data){
 		try{
-			foo.roomInfo(true, function(data) {
+			bot.roomInfo(true, function(data) {
 				var rm = data.room.metadata;
 				var roomname = data.room.name;
 				var listeners = rm.listeners;
@@ -17,7 +17,10 @@ module.exports = {
 				msg = tweets[random];
 				tweeter.post('statuses/update', {
 					status: msg
-				}, function(err, reply) {console.log(err, reply);});	
+				}, function(err, reply) {
+					console.log(err, reply);
+					bot.signal.error(err);
+				});	
 			});
 			console.log('tweet(post) running...');
 		}catch(err){

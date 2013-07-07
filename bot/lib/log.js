@@ -15,6 +15,7 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in log(listen)...');
+			bot.signal.error(err);
 		}
 	}
 }

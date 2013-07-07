@@ -4,7 +4,7 @@ module.exports = {
 			var id;
 			var random = Math.floor(Math.random() * rps.length);
 			msg = rps[random];
-			foo.speak(msg);
+			bot.speak(msg);
 			if(data.command == "pmmed"){
 				id = data.senderid;
 			}else{
@@ -22,41 +22,41 @@ module.exports = {
 					if(a.rps == "rock"){
 						if(b.rps == "rock")
 							setTimeout(function(){
-								foo.speak("Tie. Lame. :\(");
+								bot.speak("Tie. Lame. :\(");
 							}, 500);
 						if(b.rps == "paper")
 							setTimeout(function(){
-								foo.speak(b.name + " wins.");
+								bot.speak(b.name + " wins.");
 							}, 500);
 						if(b.rps == "scissors")
 							setTimeout(function(){
-								foo.speak(a.name + " wins.");
+								bot.speak(a.name + " wins.");
 							}, 500);
 					}else if(a.rps == "paper"){
 						if(b.rps == "rock")
 							setTimeout(function(){
-								foo.speak(a.name + " wins.");
+								bot.speak(a.name + " wins.");
 							}, 500);
 						if(b.rps == "paper")
 							setTimeout(function(){
-								foo.speak("Tie. Lame. :\(");
+								bot.speak("Tie. Lame. :\(");
 							}, 500);
 						if(b.rps == "scissors")
 							setTimeout(function(){
-								foo.speak(b.name + " wins.");
+								bot.speak(b.name + " wins.");
 							}, 500);
 					}else if(a.rps == "scissors"){
 						if(b.rps == "rock")
 							setTimeout(function(){
-								foo.speak(b.name + " wins.");
+								bot.speak(b.name + " wins.");
 							}, 500);
 						if(b.rps == "paper")
 							setTimeout(function(){
-								foo.speak(a.name + " wins.");
+								bot.speak(a.name + " wins.");
 							}, 500);
 						if(b.rps == "scissors")
 							setTimeout(function(){
-								foo.speak("Tie. Lame. :\(");
+								bot.speak("Tie. Lame. :\(");
 							}, 500);
 					}
 				}, 150);
@@ -66,6 +66,7 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in rps(shoot)...');
+			bot.signal.error(err);
 		}
 	}
 }

@@ -1,10 +1,23 @@
-var tweet = require('twit');
+global.tweet = require('twit');
+global.botname = 'xxx';
+global.auth = 'xxx';
+global.botid = 'xxx';
+global.room = 'xxx';
+global.afklimit = 300000;
+global.tweeter = new tweet({
+	consumer_key: 'xxx',
+	consumer_secret: 'xxx',
+	access_token: 'xxx',
+	access_token_secret: 'xxx'
+});
 global.users = [];
 global.curusers = [];
 global.mods = [];
 global.djs = [];
 global.q = [];
 global.afks = [];
+global.afkdjs = [];
+global.afkusers = [];
 global.transmit = [];
 global.sirs = [];
 global.ragers = [];
@@ -15,10 +28,12 @@ global.battling = [];
 global.schlongs = [];
 global.qtrolls = [];
 global.voters = [];
+global.votes = [];
 global.snaggers = [];
 global.weiners = [];
 global.boos = [];
-global.bans = [ 
+global.escorts = [];
+global.bans = [
 	'xxx'
 ];
 global.party = [
@@ -28,9 +43,9 @@ global.party = [
 	':tada: :boom: :tada: :boom: :tada: :boom:'
 ];
 global.launchcodes = [
-	'xxx',
-	'xxx',
-	'xxx'
+	'foo',
+	'bar',
+	'baz'
 ];
 global.actions = [
 	'http://goo.gl/nDDMe',
@@ -52,6 +67,7 @@ global.currentDjId = '';
 global.roomname = '';
 global.name = '';
 global.winner = '';
+global.afk = false;
 global.on = false;
 global.chatter = false;
 global.armed = false;
@@ -66,6 +82,8 @@ global.debug = false;
 global.autodj = false;
 global.solo = false;
 global.nerd = false;
+global.mimic = false;
+global.stats = false;
 global.clever = require('./node_modules/cleverbot-node/lib/cleverbot');
 global.snags = 0;
 global.ups = 0;
@@ -81,14 +99,9 @@ global.votelog = null;
 global.newsong = null;
 global.djcount = null,
 global.listeners = null;
-global.tweeter = new tweet({
-	consumer_key: 'xxx',
-	consumer_secret: 'xxx',
-	access_token: 'xxx-xxx',
-	access_token_secret: 'xxx'
-});
+global.fourtwoid = 'xxx';
 global.cispa = 'STOP CISPA http://goo.gl/VfHbD';
-global.Qinfo = ' teh Q is on. 1 play per dj. (/add, /remove, /pos, /list)';
+global.Qinfo = ' the queue is on. 1 play per dj. (/add, /remove, /pos, /list)';
 global.rules = "the dj battle is 1v1, type /add to get into the battle list. At the end of a song, you can vote by typing +1 in the main chat.";
 global.rps = [
 	"rock",
@@ -106,7 +119,28 @@ global.boppin = [
 	'/me is groovin',
 	':dancers:',
 	':notes:',
-	':+1:'
+	':+1:',
+	':dizzy:',
+	':yum:',
+	':joy:', 
+	':sunglasses:',
+	':star:', 
+	':scream_cat:', 
+	':heart_eyes:', 
+	':heart_decoration:',
+	':ok_hand:',
+	':raised_hands:',
+	':bow:',
+	':mega:',
+	':gem:',
+	':fireworks:',
+	':heavy_exclamation_mark:',
+	':boom:',
+	':tada:',
+	':musical_score:',
+	':octocat:',
+	':astonished:',
+	':microphone:'
 ];
 global.memes = [
 	'http://goo.gl/0fh1c', 
@@ -341,13 +375,16 @@ global.facts = [
 global.modCommands = [
 	' , getup', 
 	' getdown', 
+	' stats',
 	' solo',
 	' set',
 	' nerd',
+	' watch',
 	' chat (only pm)', 
 	' tweeter',
 	' queue',
 	' bump',
+	' stalk',
 	' boot',
 	' shuffle', 
 	' skip', 

@@ -18,7 +18,7 @@ module.exports = {
 						"http://goo.gl/eYDm2"
 					];
 					var random = Math.floor(Math.random() * humps.length);
-					foo.speak(data.name + ' dry humps @' + currentDjName + "'s leg " + humps[random]);
+					bot.speak(data.name + ' dry humps @' + currentDjName + "'s leg " + humps[random]);
 				});
 			}
 			if(debug){
@@ -26,6 +26,7 @@ module.exports = {
 			}
 		}catch(err){
 			console.log('error in hump(cannon)...');
+			bot.signal.error(err);
 		}
 	}
 }
