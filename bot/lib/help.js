@@ -343,7 +343,6 @@ module.exports = {
                         "/thanks",
                         "/blame",
                         "/mc",
-                        "/stalk",
                         "/umad?",
                         "/9001",
                         "/rage",
