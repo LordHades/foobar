@@ -16,7 +16,7 @@
     <header>
       <div class="container">
         <h1>Foobar</h1>
-        <h2>a tt.fm bot prototype</h2>
+        <h2>a turntable.fm bot prototype</h2>
 
         <section id="downloads">
           <a href="https://github.com/theylive/foobar/zipball/master" class="btn">Download as .zip</a>
@@ -28,264 +28,366 @@
 
     <div class="container">
       <section id="main_content">
-        <h3>
-<a name="media" class="anchor" href="#media"><span class="octicon octicon-link"></span></a>MEDIA:</h3>
+        <blockquote>
+<h2>
+<a name="chat-commands" class="anchor" href="#chat-commands"><span class="octicon octicon-link"></span></a>Chat Commands:</h2>
 
-<pre><code>A.I. tumblr: http://foobar-null-42.tumblr.com/
-foobar tweeter: https://twitter.com/f0obarbaz
-fawkes tweeter: https://twitter.com/fawkesbot
-</code></pre>
+<hr>
+</blockquote>
+
+<p>/help: will print a list of all available commands to you, mods will see mod commands</p>
+
+<p>/features: will print a list of currently enabled featurs</p>
+
+<p>/away: will mark you as away, you will get a pm of any conversation containing your name</p>
+
+<p>/brb: will mark you as away, you will get a pm of any conversation containing your name</p>
+
+<p>/album: will print the album info for the currently playing song</p>
+
+<p>/theme: will print the current theme</p>
+
+<p>/dive: will remove you from the stage</p>
+
+<p>/bop: will start to bop</p>
+
+<p>/fanme: will fan you</p>
+
+<p>/rules: will explain the rules for whichever mode is enabled</p>
+
+<p>/next: will announce the next song in my playlist</p>
+
+<p>/add: will add you to the waitlist of the currently enabled mode</p>
+
+<p>/remove: will remove you from the waitlist of the currently enabled mode</p>
+
+<p>/afks: will show a list of currently afk users</p>
+
+<p>/list: will show the current waitlist</p>
+
+<p>/pos: will show your position in the current waitlist</p>
+
+<p>+1: will add your vote to the current dj in dj battle mode</p>
+
+<p>/meow: will purrr at the current dj</p>
+
+<p>/props: will clap for the current dj</p>
+
+<p>/rage: will flip the table at the current dj</p>
+
+<p>/9001: will rage over nine thousand</p>
+
+<p>/umad?: will send a link to a meme</p>
+
+<p>/tank: will show orionVW\'s ascii art</p>
+
+<p>/molly: will help you find molly</p>
+
+<p>/joke: will tell a random joke</p>
+
+<p>/weed: will show the medicinal effects of a random strain</p>
+
+<p>/fact: will share a random snapple fact</p>
+
+<p>/quote: will quote from some of the best sources known on earth</p>
+
+<p>/cats: haz catfacts</p>
+
+<p>/quakes: will report the top three most recent earthquakes in the world</p>
+
+<p>/tpb: will send a random image of trailer park boys</p>
+
+<p>/define: will search urban dictionary for you</p>
+
+<p>/google: will google that for you</p>
+
+<p>/order: will serve you a delightful something or other from the menu</p>
+
+<p>/menu: will show you the items available for order</p>
+
+<p>/roll: will start a game of rock, paper, scissor, lizard, spock</p>
+
+<p>/schlong: will start a schlong measuring contest</p>
+
+<p>/blame: will take the blame</p>
+
+<p>/thanks: will be here all night ;)</p>
+
+<p>/about: will show you my make</p>
+
+<blockquote>
+<h2>
+<a name="mod-commands" class="anchor" href="#mod-commands"><span class="octicon octicon-link"></span></a>Mod Commands</h2>
+
+<hr>
+</blockquote>
+
+<p>/getup: will start djing</p>
+
+<p>/getdown:  will quit djing</p>
+
+<p>/stats: will toggle stats mode, where i will announce the votes at the end of each song</p>
+
+<p>/solo: will toggle solo mode and bot will skip so you can dj with yourself</p>
+
+<p>/set: will set a theme</p>
+
+<p>/nerd: will toggle nerd mode, so that a lot of the fun chat commands are available</p>
+
+<p>/event: will toggle event mode, so that only the set amount of event djs are allowed up</p>
+
+<p>/watch: will toggle afk watch mode, you have a limited time of inactivity before you are 
+marked as afk... if you are djing you will be kindly removed. if you are next in queue, you will be removed</p>
+
+<p>/chat: will toggle chat mode, so we can have conversations like humans. (pm only)</p>
+
+<p>/tweeter: will post the text following this command to my tweeter account.</p>
+
+<p>/queue: will toggle queue mode, where each dj gets 1 play before being removed. /Add yourself to the waitlist</p>
+
+<p>/bump: will move a V.I.P. to the front of the line in queue mode</p>
+
+<p>/boot: will boot the user following this command</p>
+
+<p>/skip: will skip the song if currently playing</p>
+
+<p>/snag: will add the current song to it's playlist</p>
+
+<p>/toss: will remove the current song from my playlist</p>
+
+<p>/battle: will toggle dj battle mode, where two djs face off with 1 song play each. Winner remains on deck to face next challenger in line</p>
+
+<p>/armed: will arm the nuke system, preparing for nuke to be run</p>
+
+<p>/nuke: will clear the decks of all djs as long as the proper launch codes and clearance levels are met</p>
+
+<p>/djs: will send a secret troll message to all djs</p>
+
+<p>/debug: will print out each of my running functions, as they are processed(console)</p>
+
+<p>/trollcop: will toggle troll<img class="emoji" title=":cop:" alt=":cop:" src="https://github.global.ssl.fastly.net/images/icons/emoji/cop.png" height="20" width="20" align="absmiddle"> mode. if queue mode is on, you will be booted for hopping 
+up out of turn three times in a row</p>
+
+<p>/announce: will toggle announce mode, this controls whether i am announcing when i bop and when users downvote</p>
+
+<p>/auto: will act as autodj, will hop up if there are less than 3 djs on deck</p>
+
+<p>/stalk: will follow the name after this command to the room they are currently in</p>
+
+<p>/game: will toggle game mode, this controls the order menu, playing rpsls and schlong</p>
+
+<p>/mc: 10 10 10 20 = 50</p>
+
+<p>/ttstats: will toggle ttstats boot mode, PEW PEW PEW</p>
+
+<p>/greet: will greet new users as they enter the room</p>
+
+<p>/twitter: will tweet out currently playing songs</p>
+
+<blockquote>
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features:</h2>
+
+<hr>
+<p>Default Mode:</p>
+</blockquote>
+
+<p>Mod Commands: </p>
+
+<blockquote>
+<p>/debug,
+/nuke,
+/armed,
+/tweeter,
+/djs,
+/snag,
+/toss,
+/skip,
+/boot,
+/set,
+/getdown,
+/getup</p>
+</blockquote>
+
+<p>Global Commands: </p>
+
+<blockquote>
+<p>/help,
+/features,
+/thanks,
+/blame,
+/mc,
+/umad?,
+/9001,
+/rage,
+/props,
+/meow,
+/tank,
+/next,
+/rules,
+/fanme,
+/bop,
+/dive,
+/theme,
+/about,
+/away,
+brb</p>
+</blockquote>
 
 <h3>
-<a name="chat--pmprivate-message-commands" class="anchor" href="#chat--pmprivate-message-commands"><span class="octicon octicon-link"></span></a>CHAT &amp; PM(private message) COMMANDS:</h3>
+<a name="queue-mode" class="anchor" href="#queue-mode"><span class="octicon octicon-link"></span></a>queue mode,</h3>
 
-<pre><code> /status or .status
-    shows the status of mod-toggled settings
-
- /add or .add
-    adds a user to the waitlist of whatever mode is enabled
-
- /remove or .remove
-    removes a user from the waitlist of whatever mode is enabled
-
- /pos or .pos
-    will show a user's position in a waitlist
-
- /list or .list
-    prints the waitlist and the index of users
-
- /rules or .rules
-    shows the rules of the currently enabled mode
-
- /away or .away
-    marks a user as "afk"
-
- /back or .back
-    marks a users as "back"
-
- /afks or .afks
-    prints the afk users list
-
- /dive or .dive
-    bot will remove you from deck
-
- /bop or .bop or /dance or .dance
-    make bot dance
-
- /fanme or .fanme  
-    make bot fan you or  if not already fanned
-
- /theme or .theme  
-    print a mod-defined theme
-
- /album or .album  
-    show current song's album info
-
- /next or .next  
-    show bot's next song in playlist
-
- /fact or .fact  
-    show a random snapple "real" fact
-
- /quote or .quote  
-    show a quote about liberty or  forrestgump or  xfiles or  futurama  or  simpsons chalkboard or  starwars or  or hitchhiker's guide to the galaxy
-
- /cats or .cats  
-    show a random cat fact
-
- /quakes or .quakes  
-    print 3 most recent global earthquakes
-
- /tpb or .tpb  
-    show link to random trailer park boys meme
-
- /joke or .joke  
-    show random riddle
-
- /weed or .weed  
-    show a strain of weed's properties
-
- /google or .google  
-    search lmgtfy
-
- /meow or .meow  
-    send "&gt;^..^&lt;" @ current dj
-
- /props or .props  
-    give props to current dj
-
- /rage or .rage  
-    flip the table at the current dj
-
- /9001 or .9001  
-    flip all the tables
-
- /umad? or .umad?  
-    show random "umad?" meme
-
- /molly or .molly  
-    show random "molly" message
-
- /rps or .rps  
-    play rock or  paper or scissors game
-
- /schlong or .schlong  
-    play schlong game
-
- /cispa or .cispa  
-    show your support
-
- /mc or .mc  
-    show "math city" meme
-
- /tank or .tank  
-    show orionvw's ascii tank
-
- /blame or .blame  
-    blame the bot
-
- /thanks or .thanks  
-    thank the bot
+<pre><code>value: queue_mode,
+mod: [
+    /queue,
+    /bump
+],
+available: [
+    /add,
+    /remove,
+    /pos,
+    /list
+]
 </code></pre>
 
-<h3>
-<a name="mod-only-commands" class="anchor" href="#mod-only-commands"><span class="octicon octicon-link"></span></a>MOD-ONLY COMMANDS:</h3>
-
-<pre><code> /getup or .getup  
-    tell the bot to hop up and dj
-
- /getdown or .getdown  
-    tell the bot to hop down
-
- /solo or .solo  
-    toggle "solo" mode on/off, to have bot auto skip self
-
- /set or .set  
-    set a theme
-
- /nerd or .nerd  
-    toggle "nerd" mode on/off, enabling and disabling dictionary and quotes
-
- /chat (only pm) or  .chat (only pm)  
-    toggle A.I. mode on/off
-
- /tweeter or .tweeter  
-    tweet through the bot's twitter account
-
- /queue or .queue  
-    toggle the queue mode on/off
-
- /bump or .bump  
-    bump a "vip" to the front of the queue
-
- /boot or .boot  
-    have bot boot a user on command
-
- /shuffle or .shuffle  
-    grab a random song and move it to the front of bot's playlist
-
- /skip or .skip  
-    skip the bot's currently playing song
-
- /snag  or .snag  
-    add the current song to the bot's playlist
-
- /toss or .toss  
-    remove the current song from the bot's playlist
-
- /battle or .battle 
-    toggle dj battle mode on/off
-
- /armed or .armed  
-    toggle the status of the "nuke"
-
- /nuke or .nuke  
-    initiate "nuke" deck-clearing sequence
-
- /djs or .djs  
-    send a pm to all djs with a "umad?" gif
-
- /debug or .debug  
-    toggle debugging mode on/off
-
- /trollcop or .trollcop  
-    toggle "troll cop" mode on/off, will boot a user for hopping up out of turn three times in a row
-</code></pre>
-
-<h3>
-<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>FEATURES:</h3>
-
-<pre><code>+afk
-    - mark yourself as "afk" and "back"
-    -receive log of all transmission mentioning you while you are away
-    -all afk users are skipped if in queue
-    -(/away, /back, /afks)
-
-+dj queue
-    -keep a rotation of djs
-    -users are called and given 30 seconds to hop up
-    -bot will remove dj after 1 song
-    -(/add, /remove, /pos, /list, /rules, /queue)
-
-+dj battle
-    -the dj battle is 1v1, 1 song per round
-    -voting window open in last 30 seconds of each play 
-    -you cannot vote for yourself
-    -(/add, /remove, /list, /rules, /battle)
-
-+auto dj
-    -when there are less than 3 djs, bot will play music
-
-+boot
-    -automatically boot users in banlist as they enter
-    -boot anyone on command
-    -(/boot)
-
-+celebrate
-    -when users hit major milestone scores, the bot will announce it to the crowd
-
-+twitter
-    -connect to the api to make posts
-    -post current songs, room stats, jokes, facts, custom
-    (/tweeter your text here)
-
-+google
-    -use let me google that for you to share a query link
-    (/google your text here)
-
-+urban dictionary
-    -search the dictionary for the most accurate definition
-    (/define your text here)
-
-+cleverbot
-    -carry on conversations in pm
-
-+iheartquotes
-    -show random riddles &amp; quotes
-    (/joke, /quote)
-
-+budgenius &amp; leafly
-    -search for random strain of weed's medicinal uses
-    (/weed)
-
-+schlong
-    -schlong measuring contest, winner called in 30 seconds
-    (/schlong)
-
-+rps(rock, paper, scissor)
-    -roll random, winner is called in ten seconds
-    (/rps)
-
-+hump cannon
-    -vip only
-    -allows for gratuitous dry humping of current dj
-    (/hump)
-
-+spud cannon
-    -vip only
-    -allows for a potato to be shot at current dj
-    (/spud)
-</code></pre>
+<p>},
+{
+    name: chat mode,
+    value: chat_mode,
+    mod: [
+        /chat (pm only)
+    ],
+    available: []
+},
+{
+    name: battle mode,
+    value: battle_mode,
+    mod: [
+        /battle
+    ],
+    available: [
+        /add,
+        /remove,
+        /list,
+        +1
+    ]
+},
+{
+    name: autodj mode,
+    value: autodj_mode,
+    mod: [
+        /auto
+    ],
+    available: []
+},
+{
+    name: solo mode,
+    value: solo_mode,
+    mod: [
+        /solo
+    ],
+    available: []
+},
+{
+    name: nerd mode,
+    value: nerd_mode,
+    mod: [
+        /nerd
+    ],
+    available: [
+        /define,
+        /album,
+        /cats,
+        /fact,
+        /joke,
+        /quote,
+        /quakes,
+        /weed,
+        /google,
+        /tpb,
+        /molly
+    ]
+},
+{
+    name: stats mode,
+    value: stats_mode,
+    mod: [
+        /stats
+    ],
+    available: []
+},
+{
+    name: afk mode,
+    value: afk_mode,
+    mod: [
+        /watch
+    ],
+    available: []
+},
+{
+    name: tweet mode,
+    value: tweet_mode,
+    mod: [
+        /twitter
+    ],
+    available: [
+    ]
+},
+{
+    name: announce mode,
+    value: announce_mode,
+    mod: [
+        /announce
+    ],
+    available: []
+},
+{
+    name: greet mode,
+    value: greet_mode,
+    mod: [
+        /greet
+    ],
+    available: [
+    ]
+},
+{
+    name: game mode,
+    value: game_mode,
+    mod: [
+        /game
+    ],
+    available: [
+        /roll,
+        /schlong,
+        /order,
+        /menu
+    ]
+},
+{
+    name: ttstats boot mode,
+    value: stat_boot,
+    mod: [
+        /ttstats
+    ],
+    available: []
+},
+{
+    name: event mode,
+    value: event_mode,
+    mod: [
+        /event
+    ],
+    available: []
+},
+{
+    name: troll cop,
+    value: troll_cop,
+    mod: [
+        /trollcop
+    ],
+    available: []
+}
+];</p>
       </section>
     </div>
 
