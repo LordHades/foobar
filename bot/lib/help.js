@@ -42,7 +42,7 @@ module.exports = {
         },
         {
             "name": "next",
-            "instructions": "/me will announce the next song in my playlist"
+            "instructions": "/me will announce the next song in its playlist"
         },
         {
             "name": "add",
@@ -158,7 +158,7 @@ module.exports = {
         },
         {
             "name": "about",
-            "instructions": "/me will show you my maker"
+            "instructions": "/me will show you its maker"
         }
     ],
     mod_list: [
@@ -200,7 +200,7 @@ module.exports = {
         },
         {
             "name": "tweeter",
-            "instructions": "/me will post the text following this command to my tweeter account."
+            "instructions": "/me will post the text following this command to its tweeter account."
         },
         {
             "name": "queue",
@@ -223,8 +223,12 @@ module.exports = {
             "instructions": "/me will add the current song to it's playlist"
         },
         {
+            "name": "shuffle",
+            "instructions": "/me will shuffle its playlist"
+        },
+        {
             "name": "toss",
-            "instructions": "/me will remove the current song from my playlist"
+            "instructions": "/me will remove the current song from its playlist"
         },
         {
             "name": "battle",
@@ -244,7 +248,7 @@ module.exports = {
         },
         {
             "name": "debug",
-            "instructions": "/me will print out each of my running functions, as they are processed(console)"
+            "instructions": "/me will print out each of its running functions, as they are processed(console)"
         },
         {
             "name": "trollcop",

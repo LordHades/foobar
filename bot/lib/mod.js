@@ -431,7 +431,7 @@ module.exports = {
 						var twit = msg[1];
 						if(twit !== undefined){
 							tweeter.post('statuses/update', {
-								status: tweet_trend + twit + tweet_mention
+								status: tweet_trend + " " + twit + " " + tweet_mention
 							}, function(err, reply) {console.log(err, reply);});
 							bot.talk('https://twitter.com/f0obarbaz');
 						}else if(err >= 1){
