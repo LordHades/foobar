@@ -330,6 +330,7 @@ module.exports = {
                         "/tweeter",
                         "/djs",
                         "/snag",
+                        "/stalk",
                         "/toss",
                         "/skip",
                         "/boot",
