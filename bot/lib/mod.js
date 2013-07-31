@@ -25,6 +25,7 @@ module.exports = {
 		try{
 			if(data.command == 'speak'){
 				name = data.name;
+                var index = mods.indexOf(data.userid);
 				bot.talk = function(msg){
 					this.speak(msg);
 				}  
@@ -33,7 +34,8 @@ module.exports = {
 					return false;
 				}
 			}else if(data.command == 'pmmed'){
-				for(i in curusers){
+				var index = mods.indexOf(data.senderid);
+                for(i in curusers){
 					if(data.senderid == curusers[i].userid){
 						name = curusers[i].name;
 					}
@@ -41,42 +43,129 @@ module.exports = {
 				bot.talk = function(msg){
 					this.pm(msg, data.senderid);
 				}
-				if(chatter){
+				if(chat_mode){
 					var cb = new clever;
 					cb.write(data.text,function(resp){
 						bot.pm(resp.message, data.senderid);
 					});
 				}
 			}
-			var index = mods.indexOf(data.userid);
 			if(index >= 0){
 				var text = data.text.toLowerCase();
-				if(text.match(/\.bump/) || text.match(/\/bump/)){
+				if(text.match(/\.bump|\/bump/)){
 					try{
 						bot.queue.vip(data);	
 					}catch(err){
 						console.log('error with mod(cmds) /bump...');
 					}
-				}else if(text.match(/\.set/) || text.match(/\/set/)){
+				}else if(text.match(/\.event|\/event/)){
+        			try{
+                        if(solo_mode){
+                            solo_mode = false;
+                            bot.speak("solo mode is now off...");
+                        }
+						if(event_mode){
+		        			event_mode = false;
+		        			bot.speak('event mode off');
+			        	}else{
+			        		event_mode = true;
+			        		bot.speak('event mode on');
+			        	}	
+					}catch(err){
+						console.log('error with mod(cmds) /event...');
+						bot.signal.error(err);
+					}
+				}else if(text.match(/\.set|\/set/)){
 					try{
 						bot.song.theme(data);	
 					}catch(err){
 						console.log('error with mod(cmds) /set...');
 					}
-				}else if(text.match(/\.boot/) || text.match(/\/boot/)){
+				}else if(text.match(/\.boot|\/boot/)){
 					try{
-						bot.boot.pwn(data);	
+						bot.system.pwn(data);	
 					}catch(err){
 						console.log('error with mod(cmds) /boot...');
 					}
-				}else if(text.match(/\.chat/) || text.match(/\/chat/)){
+				}else if(text.match(/\.announce|\/announce/)){
+        			try{
+						if(announce_mode){
+		        	        announce_mode = false;
+		        			bot.talk('announce mode off');
+			        	}else{
+			        		announce_mode = true;
+			        		bot.talk('announce mode on');
+			        	}	
+				    }catch(err){
+						console.log('error with mod(cmds) /announce...');
+						bot.signal.error(err);
+					}
+				}else if(text.match(/\.twitter|\/twitter/)){
+        			try{
+						if(tweet_mode){
+		        			tweet_mode = false;
+		        			bot.talk('tweet mode off');
+			        	}else{
+			        		tweet_mode = true;
+			        		bot.talk('tweet mode on');
+			        	}	
+				    }catch(err){
+						console.log('error with mod(cmds) /tweet...');
+						bot.signal.error(err);
+					}
+				}else if(text.match(/\.greet|\/greet/)){
+        			try{
+						if(greet_mode){
+		        			greet_mode = false;
+		        			bot.talk('greet mode off');
+			        	}else{
+			        		greet_mode = true;
+			        		bot.talk('greet mode on');
+			        	}	
+				    }catch(err){
+						console.log('error with mod(cmds) /greet...');
+						bot.signal.error(err);
+					}
+				}else if(text.match(/\.game|\/game/)){
+    				try{
+						if(game_mode){
+		        			game_mode = false;
+		        			bot.talk('game mode off');
+			        	}else{
+			        		game_mode = true;
+			        		bot.talk('game mode on');
+			        	}	
+				    }catch(err){
+						console.log('error with mod(cmds) /game...');
+						bot.signal.error(err);
+					}
+				}else if(text.match(/\.ttstats|\/ttstats/)){
+        			try{
+						if(stat_boot){
+		        		    stat_boot = false;
+		        			bot.talk('ttstats boot mode off');
+			        	}else{
+			        		stat_boot = true;
+                            bot.roomInfo(true, function(data){
+                                curusers = data.users;
+        		                for(i in curusers){
+                                    bot.system.statboot(curusers[i].name, curusers[i].userid);
+    		                	}
+                            });
+			        		bot.talk('ttstats boot mode on');
+			        	}	
+				    }catch(err){
+						console.log('error with mod(cmds) /game...');
+						bot.signal.error(err);
+					}
+				}else if(text.match(/\.chat|\/chat/)){
 					try{
 						if(data.command == "pmmed"){
-							if(chatter){
-			        			chatter = false;
+							if(chat_mode){
+			        			chat_mode = false;
 			        			bot.talk('chat mode off');
 				        	}else{
-				        		chatter = true;
+				        		chat_mode = true;
 				        		bot.talk('chat mode on');
 				        	}	
 				        }
@@ -84,13 +173,13 @@ module.exports = {
 						console.log('error with mod(cmds) /chat...');
 						bot.signal.error(err);
 					}
-				}else if(text.match(/\.auto/) || text.match(/\/auto/)){
+				}else if(text.match(/\.auto|\/auto/)){
 					try{
-						if(autodj){
-		        			autodj = false;
+						if(autodj_mode){
+		        			autodj_mode = false;
 		        			bot.talk('auto dj off');
 			        	}else{
-			        		autodj = true;
+			        		autodj_mode = true;
 			        		bot.stage.auto(data);
 			        		bot.talk('auto dj on');
 			        	}
@@ -98,20 +187,20 @@ module.exports = {
 						console.log('error with mod(cmds) /auto...');
 						bot.signal.error(err);
 					}
-				}else if(text.match(/\.nerd/) || text.match(/\/nerd/)){
+				}else if(text.match(/\.nerd|\/nerd/)){
 					try{
-						if(nerd){
-		        			nerd = false;
+						if(nerd_mode){
+		        			nerd_mode = false;
 		        			bot.talk('nerd mode off');
 			        	}else{
-			        		nerd = true;
+			        		nerd_mode = true;
 			        		bot.talk('nerd mode on');
 			        	}
 					}catch(err){
 						console.log('error with mod(cmds) /nerd...');
 						bot.signal.error(err);
 					}
-				}else if(text.match(/\/stalk/) || text.match(/\.stalk/)){
+				}else if(text.match(/\/stalk|\.stalk/)){
 				try{
 					if(text.match(/.stalk/)){
 						var text = data.text;
@@ -146,7 +235,6 @@ module.exports = {
 									setTimeout(function(){
 										bot.roomDeregister();
 										bot.roomRegister(data.room.roomid);
-										bot.speak('hey there @' + query + ' , i found ya');
 									}, 1150);
 								});
 							}, 750);
@@ -159,19 +247,20 @@ module.exports = {
 					console.log('error on chat(cmds) /stalk...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\.battle/) || text.match(/\/battle/)){
+			}else if(text.match(/\.battle|\/battle/)){
 					try{
-						if(on){
+						if(queue_mode){
 							bot.speak('teh queue is now off...');
+                            queue_mode = false;
 						}
-						if(battle == true){
-			        		battle = false;
+						if(battle_mode == true){
+			        		battle_mode = false;
 			        		stagehand = false;
 			        		poll = false;
 			        		battle_djs = [];
 			        		bot.talk('dj battle is off');
 			        	}else{
-			        		battle = true;
+			        		battle_mode = true;
 			        		bot.djbattle.init(data);
 			        		bot.talk('dj battle is on, /rules for help');
 			        	}
@@ -179,14 +268,14 @@ module.exports = {
 			        	console.log('error with mod(cmds) /battle');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.toss/) || text.match(/\/toss/)){
+				}else if(text.match(/\.toss|\/toss/)){
 					try{
 						bot.song.toss(data);
 			        }catch(err){
 			        	console.log('error with mod(cmds) /toss');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.djs/) || text.match(/\/djs/)){
+				}else if(text.match(/\.djs|\/djs/)){
 					try{
 						var random = Math.floor(Math.random() * memes.length);
 						msg = memes[random];
@@ -198,58 +287,45 @@ module.exports = {
 			        	console.log('error with mod(cmds) /djs');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.queue/) || text.match(/\/queue/)){
+				}else if(text.match(/\.queue|\/queue/)){
 					try{
-						if(battle){
-							battle = false;
+						if(battle_mode){
+							battle_mode = false;
 							bot.speak('dj battle is now off...');
 						}
-						if(on){
-							on = false;
+						if(queue_mode){
+							queue_mode = false;
 							bot.speak('teh queue is now off...');
 						}
 						else{
-							on = true;
+							queue_mode = true;
 							bot.speak('the queue is now on. /rules for info');
 						}
 			        }catch(err){
 			        	console.log('error with mod(cmds) /queue');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\/mimic/) || text.match(/\.mimic/)){
+				}else if(text.match(/\/watch|\.watch/)){
 					try{
-						if(mimic){
-							bot.talk('mimic mode is off...');
-							mimic = false;
-						}else{
-							bot.talk('mimic mode is on...');
-							mimic = true;
-						}
-					}catch(err){
-						console.log('error with mod(cmds) /mimc');
-						bot.signal.error(err);
-					}
-				}else if(text.match(/\/watch/) || text.match(/\.watch/)){
-					try{
-						if(afk){
+						if(afk_mode){
 							bot.talk('afk watch mode is off...');
-							afk = false;
+							afk_mode = false;
 						}else{
 							bot.talk('afk watch mode is on...');
-							afk = true;
+							afk_mode = true;
 						}
 					}catch(err){
 						console.log('error with mod(cmds) /watch');
 						bot.signal.error(err);
 					}
-				}else if(text.match(/\.getup/) || text.match(/\/getup/)){
+				}else if(text.match(/\.getup|\/getup/)){
 					try{
 						bot.addDj();
 			        }catch(err){
 			        	console.log('error with mod(cmds) /up');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.debug/) || text.match(/\/debug/)){
+				}else if(text.match(/\.debug|\/debug/)){
 					try{
 						if(debug){
 							debug = false;
@@ -262,67 +338,74 @@ module.exports = {
 			        	console.log('error with mod(cmds) /debug');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.getdown/) || text.match(/\/getdown/)){
+				}else if(text.match(/\.getdown|\/getdown/)){
 					try{
 						bot.remDj();
 			        }catch(err){
 			        	console.log('error with mod(cmds) /down');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.skip/) || text.match(/\/skip/)){
+				}else if(text.match(/\.skip|\/skip/)){
 					try{
-						bot.skip();
+                        var name  = data.name;
+                        bot.roomInfo(true, function(data){
+                            var curdj = data.room.metadata.current_dj;  
+                            if(botid == curdj){
+            					bot.skip();
+                                var talkback = setTimeout(function(){
+                                    bot.talk('i see how it is @' + name);
+                                }, 500);
+                            }else{
+                                bot.speak('i\'m not even djing @' + name);
+                            }
+                        });
 			        }catch(err){
 			        	console.log('error with mod(cmds) /skip');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.snag/) || text.match(/\/snag/)){
+				}else if(text.match(/\.snag|\/snag/)){
 					try{
 						bot.song.snag(data);
 			        }catch(err){
 			        	console.log('error with mod(cmds) /snag');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.shuffle/) || text.match(/\/shuffle/)){
+				}else if(text.match(/\.shuffle|\/shuffle/)){
 					try{
 						bot.song.shuffle(data);
 			        }catch(err){
 			        	console.log('error with mod(cmds) /shuffle');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.trollcop/) || text.match(/\/trollcop/)){
+				}else if(text.match(/\.trollcop|\/trollcop/)){
 					try{
 						if(data.userid !== botid){
-							if(on){
-								if(troll){
-					        		troll = false;
-					        		bot.talk('troll :cop: is off');
-					        	}else{
-					        		troll = true;
-					        		bot.talk('troll :cop: is on');
-					        	}
-							}else{
-								bot.talk('no need for :cop: right now...');
-							}
+							if(troll_cop){
+				        		troll_cop = false;
+				        		bot.talk('troll :cop: is off');
+				        	}else{
+				        		troll_cop = true;
+				        		bot.talk('troll :cop: is on');
+				        	}
 				        }
 			        }catch(err){
 			        	console.log('error with mod(cmds) troll:cop:');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.stats/) || text.match(/\/stats/)){
+				}else if(text.match(/\.stats|\/stats/)){
 					try{
-						if(stats){
-			        		stats = false;
+						if(stats_mode){
+			        		stats_mode = false;
 			        		bot.talk('song stats are off');
 			        	}else{
-			        		stats = true;
+			        		stats_mode = true;
 			        		bot.talk('song stats are on');
 			        	}   
 			        }catch(err){
 			        	console.log('error with mod(cmds) /stats');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.armed/) || text.match(/\/armed/)){
+				}else if(text.match(/\.armed|\/armed/)){
 					try{
 						if(armed){
 			        		armed = false;
@@ -335,7 +418,7 @@ module.exports = {
 			        	console.log('error with mod(cmds) /armed');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/\.tweeter/) || text.match(/\/tweeter/)){
+				}else if(text.match(/\.tweeter|\/tweeter/)){
 					try{
 						var msg;
 						var index = text.indexOf('/');
@@ -346,11 +429,9 @@ module.exports = {
 						}
 						msg = data.text.split(sym + 'tweeter ');
 						var twit = msg[1];
-						var trend = '#fawkes ';
-						var mention = ' @' + roomname;
 						if(twit !== undefined){
 							tweeter.post('statuses/update', {
-								status: trend + twit + mention
+								status: tweet_trend + twit + tweet_mention
 							}, function(err, reply) {console.log(err, reply);});
 							bot.talk('https://twitter.com/f0obarbaz');
 						}else if(err >= 1){
@@ -361,16 +442,20 @@ module.exports = {
 						console.log('error in mod(cmds) /tweeter...');
 						bot.signal.error(err);
 					}
-				}else if(text.match(/\.solo/) || text.match(/\/solo/)){
+				}else if(text.match(/\.solo|\/solo/)){
 					try{
 						bot.roomInfo(true, function(data) {
 							var djnum = data.room.metadata.djcount;
 							if(djnum <= 2){
-								if(solo){
-					        		solo = false;
+                                if(event_mode){
+                                    event_mode = false;
+                                    bot.speak('event mode is now off...');
+                                }
+								if(solo_mode){
+					        		solo_mode = false;
 					        		bot.talk('solo mode is off');
 					        	}else{
-					        		solo = true;
+					        		solo_mode = true;
 					        		bot.talk('solo mode is on');
 					        	}
 					        }else{

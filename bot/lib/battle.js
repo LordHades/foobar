@@ -39,7 +39,7 @@ module.exports = {
 	start: function(data){
 		try{
 			stagehand = true;
-			on = false;
+			queue_mode = false;
 			for(i in djs){
 				bot.pm('clearing the decks :P, you\'ve got 10 seconds', djs[i].userid);
 			}
@@ -113,11 +113,11 @@ module.exports = {
 				bot.speak('You\'re up next! @' + battle_djs[1].name +' You\'ve got 10 seconds...');
 			}else{
 				bot.speak('there are no more challengers... You are the new champion @' + winner + '!');
-				battle = false;
+				battle_mode = false;
 				setTimeout(function(){
 					battle_djs = [];
 					bot.speak('dj battle is off...');
-					battle = false;
+					battle_mode = false;
 					stagehand = false;
 					poll = false;
 				}, 500);
@@ -132,7 +132,7 @@ module.exports = {
 	},
 	print: function(){
 		try{
-			if(battle){
+			if(battle_mode){
 				if(battle_djs.length > 0){
 					var str = "Battle List:";
 		            var j = 0;

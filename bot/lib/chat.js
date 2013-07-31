@@ -1,6 +1,43 @@
 module.exports = {
 	cmds: function(data){
 		try{
+			if(data.command == 'speak'){
+				name = data.name;
+				bot.talk = function(msg){
+					this.speak(msg);
+				}  
+				if(data.userid == botid){
+					console.log('> bot talking... : ' + data.text);
+					return false;
+				}
+			}else if(data.command == 'pmmed'){
+                console.log(data.senderid, curusers);
+				for(i in curusers){
+					if(data.senderid == curusers[i].userid){
+						name = curusers[i].name;
+					}else{
+    				    name = "user not in room, id: "+ curusers[i].userid;   
+					}
+				}
+				bot.talk = function(msg){
+					this.pm(msg, data.senderid);
+				}
+				if(chat_mode && data.senderid !== botid){
+					var cb = new clever;
+					cb.write(data.text,function(resp){
+						bot.pm(resp.message, data.senderid);
+					});
+				}
+			}
+			text = data.text.toLowerCase();
+			bot.afk.give(data);
+			bot.afk.update(data.userid);
+			bot.afk.listen(data);
+			bot.mod.cmds(data);
+			bot.signal.log(data);
+			if(wiretap){
+				transmit.push(data.text);
+			}
 			if(poll == true){
 				switch(data.text){
 					case '+1':
@@ -24,54 +61,32 @@ module.exports = {
 					break;
 				}
 			}
-			if(wiretap){
-				transmit.push(data.text);
-			}
-			if(data.command == 'speak'){
-				name = data.name;
-				bot.talk = function(msg){
-					this.speak(msg);
-				}  
-				if(data.userid == botid){
-					console.log('> bot talking... : ' + data.text);
-					return false;
-				}
-			}else if(data.command == 'pmmed'){
-				for(i in curusers){
-					if(data.senderid == curusers[i].userid){
-						name = curusers[i].name;
-					}
-				}
-				bot.talk = function(msg){
-					this.pm(msg, data.senderid);
-				}
-				if(chatter){
-					var cb = new clever;
-					cb.write(data.text,function(resp){
-						bot.pm(resp.message, data.senderid);
-					});
-				}
-			}
-			text = data.text.toLowerCase();
-			bot.afk.give(data);
-			bot.afk.update(data.userid);
-			bot.logs.listen(data);
-			bot.mod.cmds(data);
-			if(text.match(/\/away/) || text.match(/\.away/) || text.match(/brb/)){
+			if(text.match(/\/away|\.away|brb/)){
 				try{
 					bot.afk.get(data);
 				}catch(err){
 					console.log('error on chat(cmds) /away...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/afks/) || text.match(/\.afks/)){
+			}else if(text.match(/\/afks|\.afks/)){
 				try{
 					bot.afk.print(data);
 				}catch(err){
 					console.log('error on chat(cmds) /afks...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/fanme/) || text.match(/\.fanme/)){
+			}else if(text.match(/\/menu|\.menu/)){
+    			try{
+                    if(game_mode){
+				    	bot.menu.print(data);
+                    }else{
+                        bot.speak('game mode is off...');
+                    }
+                }catch(err){
+					console.log('error on chat(cmds) /menu...');
+					bot.signal.error(err);
+				}
+			}else if(text.match(/\/fanme|\.fanme/)){
 				try{
 					bot.becomeFan(data.userid, function(res) {
 						if(res.success){
@@ -84,16 +99,23 @@ module.exports = {
 					console.log('error on chat(cmds) /fanme...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/rules/) || text.match(/\.rules/)){
+			}else if(text.match(/\/rules|\.rules/)){
 				try{
 					bot.signal.rules(data);
 				}catch(err){
 					console.log('error on chat(cmds) /rules...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/add/) || text.match(/\.add/)){
+			}else if(text.match(/\/about|\.about/)){
+    			try{
+					bot.speak("http://theylive.github.io/foobar/");
+				}catch(err){
+					console.log('error on chat(cmds) /rules...');
+					bot.signal.error(err);
+				}
+			}else if(text.match(/\/add|\.add/)){
 				try{
-					if(battle){
+					if(battle_mode){
 						for(i in battle_djs){
 							if(battle_djs[i].id == data.userid){
 								bot.talk('you\'re already signed up @' + name);
@@ -101,18 +123,18 @@ module.exports = {
 							}
 						}
 						bot.djbattle.add(data);
-					}else if(on){
+					}else if(queue_mode){
 						bot.queue.add(data);
 					}else{
-						bot.talk('it\'s ffa, grab a spot or ask someone to hop down...');
+						bot.talk(ffa_msg);
 					}
 				}catch(err){
 					console.log('error on chat(cmds) /add...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/remove/) || text.match(/\.remove/)){
+			}else if(text.match(/\/remove|\.remove/)){
 				try{
-					if(battle){
+					if(battle_mode){
 						for(i in battle_djs){
 							var id;
 							if(data.command == "pmmed"){
@@ -125,16 +147,16 @@ module.exports = {
 								bot.talk('@' + name + ' you have been removed from the battle list');
 							}
 						}
-					}else if(on){
+					}else if(queue_mode){
 						bot.queue.remove(data);
 					}else{
-						bot.talk('it\'s ffa, grab a spot or ask someone to hop down...');
+						bot.talk(ffa_msg);
 					}
 				}catch(err){
 					console.log('error on chat(cmds) /remove...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/nuke/) || text.match(/\.nuke/)){
+			}else if(text.match(/\/nuke|\.nuke/)){
 				try{
 					if(armed){
 						var clear = false;
@@ -164,21 +186,21 @@ module.exports = {
 					console.log('error on chat(cmds) /nuke...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/next/) || text.match(/\.next/)){
+			}else if(text.match(/\/list|\.list/)){
 				try{
-					bot.song.next(data);
+					if(queue_mode){
+						bot.queue.print();
+					}else if(battle_mode){
+						bot.djbattle.print();
+					}
+					else{
+						bot.talk(ffa_msg);
+					}
 				}catch(err){
-					console.log('error on chat(cmds) /next...');
+					console.log('error on chat(cmds) /print...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/mc/) || text.match(/\.mc/)){
-				try{
-					bot.talk('http://i.qkme.me/3oybjp.jpg');
-				}catch(err){
-					console.log('error on chat(cmds) /mc...');
-					bot.signal.error(err);
-				}
-			}else if(text.match(/\/meow/) || text.match(/\.meow/)){
+			}else if(text.match(/\/meow|\.meow/)){
 				try{
 					bot.roomInfo(true, function(data) {
 						var currentDjName = data.room.metadata.current_song.djname;
@@ -188,7 +210,7 @@ module.exports = {
 					console.log('error on chat(cmds) /meow...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/props/) || text.match(/\.props/)){
+			}else if(text.match(/\/props|\.props/)){
 				try{
 					var index = sirs.indexOf(data.userid);
 					if(index == -1){
@@ -205,28 +227,7 @@ module.exports = {
 					console.log('error on chat(cmds) /props...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/umad?/) || text.match(/\.umad?/)){
-				try{
-					bot.signal.random(memes, msg);
-				}catch(err){
-					console.log('error on chat(cmds) /umad?...');
-					bot.signal.error(err);
-				}
-			}else if(text.match(/\/molly/) || text.match(/\.molly/)){
-				try{
-					bot.signal.random(molly, msg);
-				}catch(err){
-					console.log('error on chat(cmds) /molly...');
-					bot.signal.error(err);
-				}
-			}else if(text.match(/\/cispa/) || text.match(/\.cispa/)){
-				try{
-					bot.signal.random(actions, msg);
-				}catch(err){
-					console.log('error on chat(cmds) /cispa...');
-					bot.signal.error(err);
-				}
-			}else if(text.match(/\/rage/) || text.match(/\.rage/)){
+			}else if(text.match(/\/rage|\.rage/)){
 				try{
 					var index = ragers.indexOf(data.userid);
 					if(index == -1){	
@@ -246,49 +247,7 @@ module.exports = {
 					console.log('error on chat(cmds) /rage...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/fact/) || text.match(/\.fact/)){
-				try{
-					bot.signal.random(facts, msg);
-				}catch(err){
-					console.log('error on chat(cmds) /fact...');
-					bot.signal.error(err);
-				}
-			}else if(text.match(/\/quote/) || text.match(/\.quote/)){
-				try{
-					if(nerd){
-						bot.$.ajax({
-							url: 'http://iheartquotes.com/api/v1/random?source=liberty+forrestgump+xfiles+futurama+simpsons_chalkboard+starwars+hitchhiker',
-							dataType: "json",
-							type: "GET",
-							success: function(result){
-								bot.talk(result);
-							},
-							error: function(err){
-								bot.talk(err.responseText);
-							}
-						});
-					}else{
-						bot.talk('nerd mode is off...');
-					}
-				}catch(err){
-					console.log('error on chat(cmds) /quote...');
-					bot.signal.error(err);
-				}		
-			}else if(text.match(/\/cats/) || text.match(/\.cats/)){
-				try{
-					bot.$.ajax({
-						url: 'http://catfacts.nodester.com/',
-						dataType: "json",
-						type: "GET",
-						success: function(result) {
-							bot.talk(result.catFacts);
-						}
-					});
-				}catch(err){
-					console.log('error on chat(cmds) /cats...');
-					bot.signal.error(err);
-				}		
-			}else if(text.match(/\/9001/) || text.match(/\.9001/)){
+			}else if(text.match(/\/9001|\.9001/)){
 				try{
 					var index = ragers.indexOf(data.userid);
 					if(index == -1){
@@ -302,92 +261,121 @@ module.exports = {
 					console.log('error on chat(cmds) /9001...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/quakes/) || text.match(/\.quakes/)){
+			}else if(text.match(/\/next|\.next/)){
 				try{
-					bot.$.ajax({
-						url: 'http://www.seismi.org/api/eqs?limit=3',
-						dataType: "json",
-						type: "GET",
-						success: function(result) {
-							var quakes = result.earthquakes;
-								bot.talk(quakes[0].region + " had a " + quakes[0].magnitude + " quake @" + quakes[0].timedate);
-							setTimeout(function(){
-								bot.talk(quakes[1].region + " had a " + quakes[1].magnitude + " quake @" + quakes[1].timedate);
-							});
-							setTimeout(function(){
-								bot.talk(quakes[2].region + " had a " + quakes[2].magnitude + " quake @" + quakes[2].timedate);
-							});
-						}
-					});
+					bot.song.next(data);
+				}catch(err){
+					console.log('error on chat(cmds) /next...');
+					bot.signal.error(err);
+				}
+			}else if(text.match(/\/mc|\.mc/)){
+				try{
+					bot.talk('http://i.qkme.me/3oybjp.jpg');
+				}catch(err){
+					console.log('error on chat(cmds) /mc...');
+					bot.signal.error(err);
+				}
+			}else if(text.match(/\/umad\?|\.umad\?/)){
+				try{
+					bot.signal.random(memes);
+				}catch(err){
+					console.log('error on chat(cmds) /umad?...');
+					bot.signal.error(err);
+				}
+			}else if(text.match(/\/molly|\.molly/)){
+				try{
+                    if(nerd_mode){
+					    bot.signal.random(molly);
+                    }else{
+                        bot.speak('nerd mode is off...');
+                    }
+                }catch(err){
+					console.log('error on chat(cmds) /molly...');
+					bot.signal.error(err);
+				}
+			}else if(text.match(/\/fact|\.fact/)){
+				try{
+					if(nerd_mode){
+						bot.signal.random(facts);
+					}else{
+						bot.talk('nerd mode is off...');
+					}
+				}catch(err){
+					console.log('error on chat(cmds) /fact...');
+					bot.signal.error(err);
+				}
+			}else if(text.match(/\/quote|\.quote/)){
+				try{
+					bot.signal.quotes(data);
+				}catch(err){
+					console.log('error on chat(cmds) /quote...');
+					bot.signal.error(err);
+				}		
+			}else if(text.match(/\/cats|\.cats/)){
+				try{
+					bot.signal.cats(data);
+				}catch(err){
+					console.log('error on chat(cmds) /cats...');
+					bot.signal.error(err);
+				}		
+			}else if(text.match(/\/quakes|\.quakes/)){
+				try{
+					bot.signal.quakes(data);
 				}catch(err){
 					console.log('error on chat(cmds) /quakes...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/hump/) || text.match(/\.hump/)){
+			}else if(text.match(/\/tpb|\.tpb/)){
 				try{
-					bot.hump.cannon(data);
-				}catch(err){
-					console.log('error on chat(cmds) /hump...');
-					bot.signal.error(err);
-				}
-			}else if(text.match(/\/spud/) || text.match(/\.spud/)){
-				try{
-					bot.spud.cannon(data);
-				}catch(err){
-					console.log('error on chat(cmds) /spud...');
-					bot.signal.error(err);
-				}
-			}else if(text.match(/\/tpb/) || text.match(/\.tpb/)){
-				try{
-					bot.signal.random(tpb, msg);
-				}catch(err){
+                    if(nerd_mode){
+					    bot.signal.random(tpb);
+                    }else{
+                        bot.speak('nerd mode is off...');
+                    }
+                }catch(err){
 					console.log('error on chat(cmds) /tpb...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/tank/) || text.match(/\.tank/)){
+			}else if(text.match(/\/tank|\.tank/)){
 				try{
 					bot.talk('●████▄▄▄▄▄▄▄▄▄▄▄ ▄▄▅████████▅▄▃▂ ██████████████████► ◥☼▲⊙▲⊙▲⊙▲⊙▲⊙▲☼◤');
 				}catch(err){
 					console.log('error on chat(cmds) /tank...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/schlong/) || text.match(/\.schlong/)){
-				try{
-					bot.schlong.fight(data);
-				}catch(err){
-					console.log('error on chat(cmds) /schlong...');
-					bot.signal.error(err);
+			}else if(text.match(/\/schlong|\.schlong/)){
+				if(game_mode){
+                    try{
+    					bot.games.schlong(data);
+    				}catch(err){
+    					console.log('error on chat(cmds) /schlong...');
+    					bot.signal.error(err);
+    				}
+				}else{
+    			    bot.talk('game mode is off...');   
 				}
-			}else if(text.match(/\/album/) || text.match(/\.album/)){
+			}else if(text.match(/\/album|\.album/)){
 				try{
-					bot.talk('title: ' + title);
-					var album1 = setTimeout(function () { 
-						bot.talk('artist: ' + artist);
-					}, 150);
-					var album2 = setTimeout(function () { 
-						bot.talk('album: ' + album);
-					}, 300);
-					var album3 = setTimeout(function () { 
-						bot.talk('cover art: ' + cover);
-					}, 450);
-					var album4 = setTimeout(function () { 
-						bot.talk('date: ' + date);
-					}, 600);
+					bot.signal.album(data);
 				}catch(err){
 					console.log('error on chat(cmds) /album...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/rps/) || text.match(/\.rps/)){
-				try{
-					bot.rps.shoot(data);
-				}catch(err){
-					console.log('error on chat(cmds) /rps...');
-					bot.signal.error(err);
+			}else if(text.match(/\/roll|\.roll/)){
+				if(game_mode){
+                    try{
+    					bot.games.rpsls(data);
+    				}catch(err){
+    					console.log('error on chat(cmds) /roll...');
+    					bot.signal.error(err);
+    				}
+				}else{
+    			    bot.talk('game mode is off...');   
 				}
-			}else if(text.match(/\/theme/) || text.match(/\.theme/)){
+			}else if(text.match(/\/theme|\.theme/)){
 				try{
 					if(theme == ''){
-						bot.talk('feel free to play what you like, but check the .rules');
+						bot.talk(theme);
 					}else{
 						bot.talk('the theme is ' + theme);
 					}
@@ -395,148 +383,100 @@ module.exports = {
 					console.log('error on chat(cmds) /theme...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/pos/gi) || text.match(/\.pos/)){
+			}else if(text.match(/\/pos|\.pos/gi)){
 				try{
-					if(on){
+					if(queue_mode){
 						bot.queue.position(data);
 					}
 				}catch(err){
 					console.log('error on chat(cmds) .q...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/list/) || text.match(/\.list/)){
+			}else if(text.match(/\/help|\.help/)){
 				try{
-					if(on){
-						bot.queue.print();
-					}else if(battle){
-						bot.djbattle.print();
-					}
-					else{
-						bot.talk('it\'s ffa, grab a spot or ask someone to hop down...');
-					}
-				}catch(err){
-					console.log('error on chat(cmds) /print...');
-					bot.signal.error(err);
-				}
-			}else if(text.match(/\/help/) || text.match(/\.help/)){
-				try{
-					if(data.userid !== botid || data.senderid !== botid){
-						var helpmsg = '';
-						var index = mods.indexOf(data.userid);
-						var str = 'type "." or "/" before ';
-						if(index >= 0){
-							helpmsg = str + chatCommands + modCommands;
-						}else if(data.userid == 'xxx'){
-							helpmsg = str + chatCommands + cptCommands; 
-						}else{
-							helpmsg = str + chatCommands;
-						}
-						bot.talk(helpmsg);
-					}	
+					bot.help.desk(data);
 				}catch(err){
 					console.log('error on chat(cmds) /help...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/joke/) || text.match(/\.joke/)){
+			}else if(text.match(/\/joke|\.joke/)){
 				try{
-					bot.$.ajax({
-						url: 'http://iheartquotes.com/api/v1/random?source=riddles',
-						dataType: "json",
-						type: "GET",
-						success: function(result){
-							bot.talk(result);
-						},
-						error: function(err){
-							bot.talk(err.responseText);
-						}
-					});
+					bot.signal.joke(data);
 				}catch(err){
 					console.log('error on chat(cmds) /quote...');
 					bot.signal.error(err);
 				}		
-			}else if(text.match(/\/weed/) || text.match(/\.weed/)){
-				try{
+			}else if(text.match(/\/weed|\.weed/)){
+                try{
 					bot.signal.weed(data);
 				}catch(err){
 					console.log('error on chat(cmds) /weed...');
 					bot.signal.error(err);
 				}	
-			}else if(text.match(/\/blame/) || text.match(/\.blame/)){
+			}else if(text.match(/\/blame|\.blame/)){
 				try{
 					bot.talk('/whatever');
 				}catch(err){
 					console.log('error on chat(cmds) /blame...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/thanks/) || text.match(/\.thanks/)){
+			}else if(text.match(/\/thanks|\.thanks/)){
 				try{
 					bot.talk(':) you\'re welcome @'+ name);
 				}catch(err){
 					console.log('error on chat(cmds) /thanks...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/dive/) || text.match(/\.dive/)){
+			}else if(text.match(/\/dive|\.dive/)){
 				try{
-					bot.remDj(data.userid);
+                    for(i in djs){
+    					if(djs[i] == data.userid){
+                            bot.speak(data.name + " " + dive_msg);
+						    bot.remDj(data.userid);
+						}
+					}
 				}catch(err){
 					console.log('error on chat(cmds) /dive...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\/bop/) || text.match(/\.bop/) || text.match(/\/dance/) || text.match(/\.dance/)){
+			}else if(text.match(/\/bop|\.bop|\/dance|\.dance/)){
 				try{
-					switch(data.userid || data.senderid){
-						case 'xxxx'://dance with vip
-							bot.talk('/me bops with @' + name);
-						break;
-						default:
-							bot.signal.random(boppin, msg);
-						break;
-					}
 					bot.bop();
 				}catch(err){
 					console.log('error on chat(cmds) /dance...');
 					bot.signal.error(err);
 				}
-			}else if(text.match(/\.status/) || text.match(/\/status/)){
+			}else if(text.match(/\.features|\/features/)){
 				try{
-					bot.signal.status(data);
+					bot.signal.features(data.userid);
 				}catch(err){
-					console.log('error on chat(cmds) /status');
+					console.log('error on chat(cmds) /features');
 				}
-			}else if(text.match(/\.define/) || text.match(/\/define/)){
+			}else if(text.match(/\.define|\/define/)){
 				try{
 					bot.signal.define(data);
 				}catch(err){
 					console.log('error in chat(cmds) /define');
 				}
-			}else if(text.match(/\/google/) || text.match(/\.google/)){
+			}else if(text.match(/\/google|\.google/)){
 				try{
-					if(text.match(/.google/)){
-						var msg;
-						var index = text.indexOf('/');
-						if(index >= 0){
-							sym = '/';
-						}else{
-							sym = '.';
-						}
-						msg = text.split( sym + 'google');
-						var item = msg[1];
-						if(item !== undefined){
-							var search = item.replace(/ /g,'+');
-							var ggl = 'http://lmgtfy.com/?q=' + search;
-							bot.talk(ggl);
-						}else if(err >= 1){
-							bot.talk('i\'m sorry @' + name + ' i cannot let you do that');
-							err = 0;
-						}
-					}
+					bot.signal.google(data);
 				}catch(err){
 					console.log('error on chat(cmds) /google...');
 					bot.signal.error(err);
 				}
+			}else if(text.match(/\/order|\.order/)){
+    			try{
+					if(game_mode){
+                        bot.signal.order(data);
+					}else{
+    				    bot.talk('game mode is off...');   
+					}
+				}catch(err){
+					console.log('error on chat(cmds) /order...');
+					bot.signal.error(err);
+				}
 			}
-			bot.signal.mimic(data);
-			bot.afk.listen(data);
 		}catch(err){
 			console.log('error in chat.js...');
 			bot.signal.error(err);

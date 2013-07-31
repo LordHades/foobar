@@ -2,11 +2,11 @@ module.exports ={
 	get: function(data){
 		try{
 			for (i in afks){
-				if(afks[i].id == data.userid){
-	            	return false;
-	            }
+                if(afks[i].id == data.userid){
+                    return false;
+                }
 	        }
-	        afks.push({name: data.name, id: data.userid, djing: 15000});
+	        afks.push({name: data.name, id: data.userid, djing: (afk_dj_limit * 1000)});
 			bot.speak(name + ' is afk');
 			if(debug){
 				console.log('afk(get) running...');
@@ -52,8 +52,8 @@ module.exports ={
 	},
 	count: function(){
 		try{
-			var counter = setInterval(function(){
-				if(afk){
+                var counter = setInterval(function(){
+				if(afk_mode){
 					for(i in users){
 						users[i].heartbeat -= 1000;
 						if(users[i].heartbeat <= 0){
@@ -61,7 +61,7 @@ module.exports ={
 							users[i].afk = true;
 						}
 						bot.afk.eval(users[i].id);
-					};
+					}
 				}
 			}, 1000);
 			if(debug){
@@ -75,13 +75,13 @@ module.exports ={
 		try{
 			for(i in users){
 				if(id == users[i].id){
-					users[i].heartbeat = afklimit;
+					users[i].heartbeat = (afklimit * 60000);
 					users[i].afk = false;
 				}
 				for(i in afks){
 					if(afks[i].id == id){
 						bot.speak(afks[i].name + ' is back');
-						afks[i].djing = 15000;
+						afks[i].djing = (afk_dj_limit * 1000);
 						afks.splice(i, 1);
 					}
 				}
@@ -111,7 +111,7 @@ module.exports ={
 					var ind = afkdjs.indexOf(afks[a].id);
 					if(ind == -1){
 						afkdjs.push(afks[a].id);
-						bot.speak('@' + afks[a].name + ' , you have 15 seconds to return before being kindly escorted...');
+						bot.speak('@' + afks[a].name + ' , please return before being kindly escorted...');
 						bot.afk.drain(afks[a].id);
 					}
 				}
@@ -119,18 +119,18 @@ module.exports ={
 			for(i in afks){
 				for(x in q){
 					if(afks[i].id == q[x].id){
-						bot.speak('@' + afks[i].name + ' , you are being removed from the queue, bc afk...');
+						bot.speak('@' + afks[i].name + ' , was removed from the queue, bc afk...');
 						q.shift();
 					}
 				}
 			}
 			for(i in users){
 				if(users[i].id == id){
-					if(users[i].afk == true && (users[i].id !== botid || users[i].id !== fourtwoid)){
+					if(users[i].afk === true && (users[i].id !== botid)){
 						var index = afkusers.indexOf(users[i].id);
 						if(index == -1){
 							afkusers.push(users[i].id);
-							afks.push({name: users[i].name, id: users[i].id, djing: 15000});
+							afks.push({name: users[i].name, id: users[i].id, djing: (afk_dj_limit * 1000)});
 							bot.speak(users[i].name + ' is afk');						
 							return true;
 						}
@@ -154,8 +154,10 @@ module.exports ={
 						afks[i].djing -= 1000;
 						if(afks[i].djing <= 0){
 							afks[i].djing = 0;
-							bot.remDj(afks[i].id);
-						}
+                            if(afk_mode){
+    							bot.remDj(afks[i].id);
+                            }
+                        }
 					}
 				}
 			}, 1000);
@@ -173,7 +175,7 @@ module.exports ={
 				var sid = afks[i].id;
 				var mention = '@'+sname;
 				if(data.userid !== botid){
-					if(data.text.match(sname) || data.text.match(mention) || data.text.match(mention) || data.text.match(sname)){
+					if(data.text.match(sname|mention)){
 						var ts = new Date(),
 							year = ts.getFullYear(),
 							month = ts.getMonth(),
