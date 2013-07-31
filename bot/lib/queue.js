@@ -20,9 +20,6 @@ module.exports = {
                         if(data.djids.length < 3){
                             queue_mode = false;
                             bot.speak(slow_queue_msg);
-                            var automsg = setTimeout(function(){
-                                bot.speak(queue_msg);
-                            }, 750);
                         }  
                     });
                 }
