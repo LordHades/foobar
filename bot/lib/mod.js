@@ -433,7 +433,7 @@ module.exports = {
 							tweeter.post('statuses/update', {
 								status: tweet_trend + " " + twit + " " + tweet_mention
 							}, function(err, reply) {console.log(err, reply);});
-							bot.talk('https://twitter.com/f0obarbaz');
+							bot.talk(bot_twitter);
 						}else if(err >= 1){
 							bot.talk('i\'m sorry @' + name + ' i cannot let you do that');
 							err = 0;
