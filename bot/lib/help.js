@@ -33,6 +33,10 @@ module.exports = {
             "instructions": "/me will start to bop"
         },
         {
+            "name": "bugs",
+            "instructions": "/me will provide bug reporting url"
+        },
+        {
             "name": "fanme",
             "instructions": "/me will fan you"
         },
@@ -267,7 +271,7 @@ module.exports = {
             "instructions": "/me will follow the name after this command to the room they are currently in"
         },
         {
-            "name": "game",
+            "name": "games",
             "instructions": "/me will toggle game mode, this controls the order menu, playing rpsls and schlong"
         },
         {
@@ -482,7 +486,7 @@ module.exports = {
 					name: "game mode",
 					value: game_mode,
                     mod: [
-                        "/game"
+                        "/games"
                     ],
                     available: [
                         "/roll",
