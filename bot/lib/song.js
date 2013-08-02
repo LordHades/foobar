@@ -273,7 +273,7 @@ module.exports = {
             }
 			var title = data.room.metadata.current_song.metadata.song;
 			var artist = data.room.metadata.current_song.metadata.artist;
-			if(stats_mode){
+			if(announce_mode){
 				bot.speak(title + ' by ' + artist + ' got ' + ups + ':thumbsup: ' + downs + ':thumbsdown: ' + snags + ':heart:');
 			}
 			snags = 0;

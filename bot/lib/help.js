@@ -187,10 +187,6 @@ module.exports = {
             "instructions": "/me will set a theme"
         },
         {
-            "name": "nerd",
-            "instructions": "/me will toggle nerd mode, so that a lot of the fun chat commands are available"
-        },
-        {
             "name": "event",
             "instructions": "/me will toggle event mode, so that only the set amount of event djs are allowed up"
         },
@@ -277,14 +273,6 @@ module.exports = {
         {
             "name": "mc",
             "instructions": "10 10 10 20 = 50"
-        },
-        {
-            "name": "ttstats",
-            "instructions": "/me will toggle ttstats boot mode, PEW PEW PEW"
-        },
-        {
-            "name": "greet",
-            "instructions": "/me will greet new users as they enter the room"
         },
         {
             "name": "twitter",
@@ -421,34 +409,6 @@ module.exports = {
                     available: []
 				},
 				{
-					name: "nerd mode",
-					value: nerd_mode,
-                    mod: [
-                        "/nerd"
-                    ],
-                    available: [
-                        "/define",
-                        "/album",
-                        "/cats",
-                        "/fact",
-                        "/joke",
-                        "/quote",
-                        "/quakes",
-                        "/weed",
-                        "/google",
-                        "/tpb",
-                        "/molly"
-                    ]
-				},
-				{
-					name: "stats mode",
-					value: stats_mode,
-                    mod: [
-                        "/stats"
-                    ],
-                    available: []
-				},
-				{
 					name: "afk mode",
 					value: afk_mode,
                     mod: [
@@ -473,15 +433,6 @@ module.exports = {
                     ],
                     available: []
 				},
-    			{
-					name: "greet mode",
-					value: greet_mode,
-                    mod: [
-                        "/greet"
-                    ],
-                    available: [
-                    ]
-				},
         		{
 					name: "game mode",
 					value: game_mode,
@@ -492,7 +443,18 @@ module.exports = {
                         "/roll",
                         "/schlong",
                         "/order",
-                        "/menu"
+                        "/menu",
+                        "/define",
+                        "/album",
+                        "/cats",
+                        "/fact",
+                        "/joke",
+                        "/quote",
+                        "/quakes",
+                        "/weed",
+                        "/google",
+                        "/tpb",
+                        "/molly"
                     ]
 				},
             	{

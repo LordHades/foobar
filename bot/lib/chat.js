@@ -284,10 +284,10 @@ module.exports = {
 				}
 			}else if(text.match(/\/molly|\.molly/)){
 				try{
-                    if(nerd_mode){
+                    if(game_mode){
 					    bot.signal.random(molly);
                     }else{
-                        bot.speak('nerd mode is off...');
+                        bot.speak('game mode is off...');
                     }
                 }catch(err){
 					console.log('error on chat(cmds) /molly...');
@@ -295,10 +295,10 @@ module.exports = {
 				}
 			}else if(text.match(/\/fact|\.fact/)){
 				try{
-					if(nerd_mode){
+					if(game_mode){
 						bot.signal.random(facts);
 					}else{
-						bot.talk('nerd mode is off...');
+						bot.talk('game mode is off...');
 					}
 				}catch(err){
 					console.log('error on chat(cmds) /fact...');
@@ -327,10 +327,10 @@ module.exports = {
 				}
 			}else if(text.match(/\/tpb|\.tpb/)){
 				try{
-                    if(nerd_mode){
+                    if(game_mode){
 					    bot.signal.random(tpb);
                     }else{
-                        bot.speak('nerd mode is off...');
+                        bot.speak('game mode is off...');
                     }
                 }catch(err){
 					console.log('error on chat(cmds) /tpb...');

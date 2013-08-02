@@ -55,7 +55,7 @@ module.exports = {
   	register: function(data){
 		try{
 			var user = data.user[0];
-			if(greet_mode){
+			if(announce_mode){
                 var welcome = setTimeout(function(){
 			    	bot.signal.greet(data);
 			    }, 750);

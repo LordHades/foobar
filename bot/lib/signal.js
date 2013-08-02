@@ -71,7 +71,7 @@ module.exports = {
 	},
 	album: function(data){
 		try{
-			if(nerd_mode){
+			if(game_mode){
 				bot.talk('title: ' + title);
 				var album1 = setTimeout(function () { 
 					bot.talk('artist: ' + artist);
@@ -108,7 +108,7 @@ module.exports = {
 	},
 	cats: function(data){
 		try{
-			if(nerd_mode){
+			if(game_mode){
 				bot.$.ajax({
 					url: 'http://catfacts.nodester.com/',
 					dataType: "json",
@@ -118,7 +118,7 @@ module.exports = {
 					}
 				});
 			}else{
-				bot.talk('nerd mode is off...');
+				bot.talk('game mode is off...');
 			}
 		}catch(err){
 			console.log('error in signal(cats)...');
@@ -127,7 +127,7 @@ module.exports = {
 	},
 	quotes: function(data){
 		try{
-			if(nerd_mode){
+			if(game_mode){
 				bot.$.ajax({
 					url: 'http://iheartquotes.com/api/v1/random?source=liberty+forrestgump+xfiles+futurama+simpsons_chalkboard+starwars+hitchhiker',
 					dataType: "json",
@@ -140,7 +140,7 @@ module.exports = {
 					}
 				});
 			}else{
-				bot.talk('nerd mode is off...');
+				bot.talk('game mode is off...');
 			}
 		}catch(err){
 			console.log('error in signal(quotes)...');
@@ -149,7 +149,7 @@ module.exports = {
 	},
 	quakes: function(data){
 		try{
-			if(nerd_mode){
+			if(game_mode){
 				bot.$.ajax({
 					url: 'http://www.seismi.org/api/eqs?limit=3',
 					dataType: "json",
@@ -166,7 +166,7 @@ module.exports = {
 					}
 				});
 			}else{
-				bot.talk('nerd mode is off...');
+				bot.talk('game mode is off...');
 			}
 		}catch(err){
 			console.log('error in signal(quakes)...');
@@ -175,7 +175,7 @@ module.exports = {
 	},
 	joke: function(data){
 		try{
-			if(nerd_mode){
+			if(game_mode){
 				bot.$.ajax({
 					url: 'http://iheartquotes.com/api/v1/random?source=riddles',
 					dataType: "json",
@@ -188,7 +188,7 @@ module.exports = {
 					}
 				});
 			}else{
-				bot.talk('nerd mode is off...');
+				bot.talk('game mode is off...');
 			}
 		}catch(err){
 			console.log('error in signal(joke)...');
@@ -197,7 +197,7 @@ module.exports = {
 	},
 	weed: function(data){
 		try{
-			if(nerd_mode){
+			if(game_mode){
 				bot.$.ajax({
 					url: 'http://www.leafly.com/api/strains',
 					type: "GET",
@@ -219,7 +219,7 @@ module.exports = {
 					console.log('signal(weed) running...');
 				}
 			}else{
-				bot.talk('nerd mode is off...');
+				bot.talk('game mode is off...');
 			}
 		}catch(err){
 			console.log('error in signal(weed)...');
@@ -228,7 +228,7 @@ module.exports = {
 	},
 	google: function(data){
 		try{
-			if(nerd_mode){
+			if(game_mode){
 				if(text.match(/.google/)){
 					var msg;
 					var index = text.indexOf('/');
@@ -249,7 +249,7 @@ module.exports = {
 					}
 				}
 			}else{
-				bot.talk('nerd mode is off...');
+				bot.talk('game mode is off...');
 			}
 		}catch(err){
 			console.log('error in signal(google)...');
@@ -311,7 +311,7 @@ module.exports = {
 	},
 	define: function(data){
 		try{
-			if(nerd_mode){
+			if(game_mode){
 				var word;
 				var index = text.indexOf('/');
 				if(index >= 0){
@@ -338,7 +338,7 @@ module.exports = {
 					}
 				});
 			}else{
-				bot.talk('nerd mode is off...');
+				bot.talk('game mode is off...');
 			}
 			if(debug){
 				console.log('signal(define) running...');
@@ -437,14 +437,6 @@ module.exports = {
 					value: solo_mode
 				},
 				{
-					name: "nerd mode",
-					value: nerd_mode
-				},
-				{
-					name: "stats mode",
-					value: stats_mode
-				},
-				{
 					name: "afk mode",
 					value: afk_mode
 				},
@@ -455,10 +447,6 @@ module.exports = {
     			{
 					name: "announce mode",
 					value: announce_mode
-				},
-    			{
-					name: "greet mode",
-					value: greet_mode
 				},
         		{
 					name: "game mode",
