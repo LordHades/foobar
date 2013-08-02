@@ -52,7 +52,7 @@ module.exports = {
 			}
 			if(index >= 0){
 				var text = data.text.toLowerCase();
-				if(text.match(/^\/bump$/) || text.match(/^\.bump$/)){
+				if(text.match(/\/bump/) || text.match(/\.bump/)){
 					try{
 						bot.queue.vip(data);	
 					}catch(err){
@@ -75,13 +75,13 @@ module.exports = {
 						console.log('error with mod(cmds) /event...');
 						bot.signal.error(err);
 					}
-				}else if(text.match(/^\/set$/) || text.match(/^\.set$/)){
+				}else if(text.match(/\/set/) || text.match(/\.set/)){
 					try{
 						bot.song.theme(data);	
 					}catch(err){
 						console.log('error with mod(cmds) /set...');
 					}
-				}else if(text.match(/^\/boot$/) || text.match(/^\.boot$/)){
+				}else if(text.match(/\/boot/) || text.match(/\.boot/)){
 					try{
 						bot.system.pwn(data);	
 					}catch(err){
@@ -222,7 +222,6 @@ module.exports = {
 							bot.talk('i\'m sorry @' + name + ' i cannot let you do that');
 							err = 0;
 						}
-					}
 				}catch(err){
 					console.log('error on chat(cmds) /stalk...');
 					bot.signal.error(err);
@@ -248,7 +247,7 @@ module.exports = {
 			        	console.log('error with mod(cmds) /battle');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/^\/chat$/) || text.match(/^\.chat$/)){
+				}else if(text.match(/^\/toss$/) || text.match(/^\.toss$/)){
 					try{
 						bot.song.toss(data);
 			        }catch(err){
@@ -385,7 +384,7 @@ module.exports = {
 			        	console.log('error with mod(cmds) /armed');
 			        	bot.signal.error(err);
 			        }
-				}else if(text.match(/^\/tweeter$/) || text.match(/^\.tweeter$/)){
+				}else if(text.match(/\/tweeter/) || text.match(/\.tweeter/)){
 					try{
 						var msg;
 						var index = text.indexOf('/');
