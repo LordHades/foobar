@@ -10,8 +10,8 @@ global.consumer_key = "";
 global.consumer_secret = "";
 global.access_token = "";
 global.access_token_secret = "";
-global.tweet_trend = "#";
-global.tweet_mention = "@";
+global.tweet_trend = "";
+global.tweet_mention = "";
 
 //BOT SETTINGS
 global.botname = "";
@@ -19,7 +19,7 @@ global.bot_avatar = "";
 global.bot_laptop = "";
 global.bot_twitter = "";
 global.bot_soundcloud = ""; 
-global.bot_website = "http://www.freethinc.org";
+global.bot_website = "";
 global.bot_facebook = ""; 
 global.bot_about = "";
 global.bot_favArtists = "";
@@ -47,6 +47,7 @@ global.event_djs = 3;
 
 //ROOM INFO
 global.botgreet = "/help for bot commands";
+global.modgreet = "wb, keep it clean";
 global.boot_msg = "Pew Pew Pew";
 global.ffa_msg = "it's ffa, grab a spot or ask someone to hop down...";
 global.queue_msg = "the queue is on. 1 play per dj. (/add, /remove, /pos, /list)";

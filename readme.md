@@ -70,7 +70,7 @@
 
 	/menu: will show you the items available for order
 
-	/roll: will start a game of rock, paper, scissor, lizard, spock
+	/rsps: will start a game of rock, paper, scissor, lizard, spock
 
 	/schlong: will start a schlong measuring contest
 
@@ -87,13 +87,9 @@
 
 	/getdown:  will quit djing
 
-	/stats: will toggle stats mode, where i will announce the votes at the end of each song
-
 	/solo: will toggle solo mode and bot will skip so you can dj with yourself
 
 	/set: will set a theme
-
-	/nerd: will toggle nerd mode, so that a lot of the fun chat commands are available
 
 	/event: will toggle event mode, so that only the set amount of event djs are allowed up
 
@@ -133,13 +129,11 @@
 
 	/stalk: will follow the name after this command to the room they are currently in
 
-	/game: will toggle game mode, this controls the order menu, playing rpsls and schlong
+	/games: will toggle game mode, this controls the order menu, playing rpsls and schlong, and a lot of the fun chat commands are available
 
 	/mc: 10 10 10 20 = 50
 
 	/ttstats: will toggle ttstats boot mode, PEW PEW PEW
-
-	/greet: will greet new users as they enter the room
 
 	/twitter: will tweet out currently playing songs
 

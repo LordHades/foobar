@@ -145,7 +145,7 @@ module.exports = {
             "instructions": "/me will show you the items available for order"
         },
         {
-            "name": "roll",
+            "name": "rspls",
             "instructions": "/me will start a game of rock, paper, scissor, lizard, spock"
         },
         {
@@ -256,7 +256,7 @@ module.exports = {
         },
         {
             "name": "announce",
-            "instructions": "/me will toggle announce mode, this controls whether i am announcing when i bop and when users downvote"
+            "instructions": "/me will toggle announce mode, this controls greetings, end of song stats, announcing when i bop, and when users downvote"
         },
         {
             "name": "auto",
@@ -268,11 +268,19 @@ module.exports = {
         },
         {
             "name": "games",
-            "instructions": "/me will toggle game mode, this controls the order menu, playing rpsls and schlong"
+            "instructions": "/me will toggle game mode, this controls the order menu, playing rpsls and schlong, and a lot of the fun chat commands"
         },
         {
             "name": "mc",
             "instructions": "10 10 10 20 = 50"
+        },
+        {
+            "name": "ttstats",
+            "instructions": "/me will toggle ttstats boot mode, PEW PEW PEW"
+        },
+        {
+            "name": "greet",
+            "instructions": "/me will greet new users as they enter the room"
         },
         {
             "name": "twitter",
@@ -323,7 +331,19 @@ module.exports = {
                         "/debug",
                         "/nuke",
                         "/armed",
+                        "/queue",
+                        "/battle",
+                        "/watch",
+                        "/solo",
+                        "/ttstats",
+                        "/announce",
+                        "/games",
+                        "/twitter",
                         "/tweeter",
+                        "/chat (pm only)",
+                        "/auto",
+                        "/event",
+                        "/trollcop",
                         "/djs",
                         "/snag",
                         "/stalk",
@@ -361,7 +381,6 @@ module.exports = {
 					name: "queue mode",
 					value: queue_mode,
                     mod: [
-                        "/queue",
                         "/bump"
                     ],
                     available: [
@@ -374,17 +393,13 @@ module.exports = {
 				{
 					name: "chat mode",
 					value: chat_mode,
-                    mod: [
-                        "/chat (pm only)"
-                    ],
+                    mod: [],
                     available: []
 				},
 				{
 					name: "battle mode",
 					value: battle_mode,
-                    mod: [
-                        "/battle"
-                    ],
+                    mod: [],
                     available: [
                         "/add",
                         "/remove",
@@ -395,52 +410,40 @@ module.exports = {
 				{
 					name: "autodj mode",
 					value: autodj_mode,
-                    mod: [
-                        "/auto"
-                    ],
+                    mod: [],
                     available: []
 				},
 				{
 					name: "solo mode",
 					value: solo_mode,
-                    mod: [
-                        "/solo"
-                    ],
+                    mod: [],
                     available: []
 				},
 				{
 					name: "afk mode",
 					value: afk_mode,
-                    mod: [
-                        "/watch"
-                    ],
+                    mod: [],
                     available: []
 				},
     			{
 					name: "tweet mode",
 					value: tweet_mode,
-                    mod: [
-                        "/twitter"
-                    ],
+                    mod: [],
                     available: [
                     ]
 				},
     			{
 					name: "announce mode",
 					value: announce_mode,
-                    mod: [
-                        "/announce"
-                    ],
+                    mod: [],
                     available: []
 				},
         		{
 					name: "game mode",
 					value: game_mode,
-                    mod: [
-                        "/games"
-                    ],
+                    mod: [],
                     available: [
-                        "/roll",
+                        "/rspls",
                         "/schlong",
                         "/order",
                         "/menu",
@@ -460,25 +463,19 @@ module.exports = {
             	{
 					name: "ttstats boot mode",
 					value: stat_boot,
-                    mod: [
-                        "/ttstats"
-                    ],
+                    mod: [],
                     available: []
 				},
                 {
 					name: "event mode",
 					value: event_mode,
-                    mod: [
-                        "/event"
-                    ],
+                    mod: [],
                     available: []
 				},
                 {
     				name: "troll cop",
 					value: troll_cop,
-                    mod: [
-                        "/trollcop"
-                    ],
+                    mod: [],
                     available: []
 				}
 			];

@@ -275,10 +275,10 @@ module.exports = {
                             }
                             schlongGame.splice(0, schlongGame.length);
                             weiners = [];
+                            schlongs = [];
                         }
                     }, 30000);
                 }
-
             }else{
                 bot.speak('stop being a :trollface: @' + name + ' get used to the .schlong u were born with');
             }
@@ -287,6 +287,36 @@ module.exports = {
             }
         }catch(err){
             console.log('error in schlong(fight)...');
+            bot.signal.error(err);
+        }
+    },
+    roll: function(data){
+        try{
+            var id = data.userid;
+            var name = data.name;
+            var index = rolls.indexOf(id);
+            if(index == -1){
+                rolls.push(id);
+                var num = Math.floor(Math.random() * 99);
+                roll_scores.push(num);
+                bot.speak(data.name + " rolled a " + num);
+                rollers.push({name: name, id: id, roll: num});
+                var rollGame = setTimeout(function(){
+                    var winner = Math.max.apply(Math, roll_scores);
+                    for(i in rollers){
+                        if(winner == rollers[i].roll){
+                            bot.speak("@" + rollers[i].name + " wins with a roll of " + winner);
+                        }
+                        rollers.splice(0, rollers.length);
+                        roll_scores = [];
+                        rolls = [];
+                    }
+                }, 15000);
+            }else{
+                bot.pm(":trollface:", id);
+            }
+        }catch(err){
+            console.log('error in games(roll)...');
             bot.signal.error(err);
         }
     }

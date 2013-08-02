@@ -14,6 +14,7 @@ module.exports = {
 			sirs = [];
 			ragers = [];
 			schlongs = [];
+			rolls = [];
 			snaggers = [];
 			qtrolls = [];
 			boos = [];

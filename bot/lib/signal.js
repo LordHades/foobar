@@ -4,6 +4,13 @@ module.exports = {
 			var user = data.user[0];
 			var welcome = 'Welcome to ' + roomname + ' @' + user.name;
 			var greeting;
+			for(i in mods){
+				if(user.userid == mods[i]){
+					greeting = modgreet;
+					bot.pm(greeting, user.userid);
+					return;
+				}
+			}
 			if(queue_mode){
 				greeting = welcome + ' ' + queue_msg;
 			}else if(battle_mode){
