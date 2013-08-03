@@ -1,4 +1,4 @@
->##Chat Commands:
+##Chat Commands:
 
 	/help: will print a list of all available commands to you, mods will see mod commands
 
@@ -81,7 +81,7 @@
 	/about: will show you my make
 
 
->##Mod Commands
+##Mod Commands
 
 	/getup: will start djing
 
@@ -125,7 +125,9 @@
 
 	/announce: will toggle announce mode, this controls whether i am announcing when i bop and when users downvote
 
-	/auto: will act as autodj, will hop up if there are less than 3 djs on deck
+	/autodj: will act as autodj, will hop up if there are less than 3 djs on deck
+
+	/autoq: will toggle auto queue, the queue will turn on when there are 5 djs on deck and will turn off once only 2 djs are on deck
 
 	/stalk: will follow the name after this command to the room they are currently in
 
@@ -140,7 +142,7 @@
 
 ##Features:
 ###Default Mode:
-	Description: 
+	Description: The bot will run at it's most basic level of features/interactivity. The commands available are for interaction with turntable events for the most part.
 
 	
 	Mod Commands: 
@@ -149,7 +151,20 @@
 	/armed,
 	/tweeter,
 	/djs,
+	/chat (pm only)
 	/snag,
+	/queue,
+	/announce 
+	/autodj
+	/twitter
+	/autoq,
+	/battle
+	/games,
+	/event,
+	/ttstats,
+	/solo,
+	/watch, 
+	/trollcop,
 	/toss,
 	/skip,
 	/boot,
@@ -157,7 +172,7 @@
 	/getdown,
 	/getup
 	
-	Global Commands: 
+	Commands: 
 	/help,
 	/features,
 	/thanks,
@@ -179,16 +194,13 @@
 	/away,
 	brb
 
-
-
 ###Queue Mode:	
-	Description: 
+	Description: The bot will keep a waitlist for listeners waiting to dj. users can "/add" themselves to the list and are called up in order to the stage. A dj is allowed to play the designated song limit before being escorted. 
 
 	Mod Commands:
-	/queue,
 	/bump
 
-	Global Commands:
+	Commands:
 	/add,
 	/remove,
 	/pos,
@@ -196,116 +208,57 @@
 
 
 ###Chat Mode: 
-	Description: 
-	
-	Mod Commands:
-	/chat (pm only)
-
+	Description: The bot will carry on a conversation with users through private messages(pm). Powered by [cleverbot](http://www.cleverbot.com/).
 
 ###Battle Mode:
-	Description: 
+	Description: The bot will allow a battle list to be built, where users can add themselves. The users face off 1v1 with the designated amount of "rounds" or songs. A voting window will open up with 30 seconds left for each song played. The dj with the most votes counted is the winner.
 
-	Mod Commands:
-		/battle
-
-	Global Commands:
-		/add,
-		/remove,
-		/list,
-		+1
+	Commands:
+	/add,
+	/remove,
+	/list,
+	+1
 
 ###Autodj Mode:
-	Description: 
-
-	Mod Commands: 
-		/auto
+	Description: When the bot notices there are only two djs or less, it will hop up on stage to dj.
 
 ###Solo Mode:
-	Description: 
-
-	Mod Commands:
-		/solo
-
-
-###Nerd Mode:
-	Description: 
-
-	Mod Commands: 
-		/nerd
-		
-	Global Commands:
-		/define,
-		/album,
-		/cats,
-		/fact,
-		/joke,
-		/quote,
-		/quakes,
-		/weed,
-		/google,
-		/tpb,
-		/molly
-
-###Stats Mode:
-	Description: 
-
-	Mod Commands:
-		/stats
-
+	Description: The bot will stay on deck with an individual and skip itself on it's turn, so someone can dj with themselves. Once a 3rd dj hops up, solo mode is deactivated.
 
 ##Afk Mode,
-	Description: 
-
-	Mod Commands:
-		/watch
-
+	Description: Afk watch starts when a user enters the room, with the designated time limit given to them to stay active. This time is constantly draining against them, every second. Once a user chats, votes, snags or hops up to dj their afklimit is refreshed. If a user does not do any of these activities, the bot will consider and mark you afk(away from keyboard). If you are on deck and afk, you will be given the designated time to return before being removed from the stage. When you are afk & in queue waitlist, you will be skipped one your turn.
 
 ###Tweet Mode:
-	Description: 
-
-	Mod Commands:
-		/twitter
-
+	Description: The bot will tweet various designated messages when new songs are playing, including the current song and room information.
 
 ###Announce Mode,
-	Description: 
-
-	Mod Commands:
-		/announce
-
-###Greet Mode:
-	Description: 
-
-	Mod Commands:
-		/greet
+	Description: The bot will announce when a user downvotes a currently playing song, will greet a user when they enter the room, will announce song stats at the end of each play and will show an emoji when it is dancing.
 
 ###Game Mode:
-	Description: 
+	Description: Various game type features will be toggled that usually are called "spam", appropriately. Thing is they are pretty fun for most people it seems. Some example features are urban dictionary search, let me google that for you, i heart quotes randoms and riddles. There are actual games too, like a schlong measuring contest, rock paper scissors lizard spock, and a high number roll game.
 
-	Mod Commands:
-		/game
-
-	Global Commands:
-		/roll,
-		/schlong,
-		/order,
-		/menu
+	Commands:
+	/roll,
+	/schlong,
+	/order,
+	/menu,
+	/define,
+	/album,
+	/cats,
+	/fact,
+	/joke,
+	/quote,
+	/quakes,
+	/weed,
+	/google,
+	/tpb,
+	/molly
 
 ###ttStats Boot Mode:
-	Description: 
-
-	Mod Commands:
-		/ttstats
+	Description: A lot of people would rather not use the [opt out](http://www.ttstats.info/optout) but would rather boot the ttstats, here ya go.
 
 ###Event Mode:
 	Description: 
-
-	Mod Commands: 
-		/event
-
+ 
 ###Troll Cop:
 	Description: 
-
-	Mod Commands: 
-		/trollcop
-

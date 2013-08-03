@@ -427,7 +427,7 @@ module.exports = {
 					name: "queue mode",
 					value: queue_mode
 				},
-				}
+				{
 					name: "auto queue",
 					value: auto_queue
 				},

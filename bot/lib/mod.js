@@ -183,7 +183,7 @@ module.exports = {
 					}
 				}else if(text.match(/^\/autoq$/) || text.match(/^\.autoq$/)){
 					try{
-						if(autodj_mode){
+						if(auto_queue){
 		        			auto_queue = false;
 		        			bot.talk('auto queue off');
 			        	}else{
