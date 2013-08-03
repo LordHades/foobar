@@ -28,10 +28,8 @@
 
     <div class="container">
       <section id="main_content">
-        <blockquote>
-<h2>
+        <h2>
 <a name="chat-commands" class="anchor" href="#chat-commands"><span class="octicon octicon-link"></span></a>Chat Commands:</h2>
-</blockquote>
 
 <pre><code>/help: will print a list of all available commands to you, mods will see mod commands
 
@@ -103,7 +101,7 @@
 
 /menu: will show you the items available for order
 
-/roll: will start a game of rock, paper, scissor, lizard, spock
+/rsps: will start a game of rock, paper, scissor, lizard, spock
 
 /schlong: will start a schlong measuring contest
 
@@ -114,22 +112,16 @@
 /about: will show you my make
 </code></pre>
 
-<blockquote>
 <h2>
 <a name="mod-commands" class="anchor" href="#mod-commands"><span class="octicon octicon-link"></span></a>Mod Commands</h2>
-</blockquote>
 
 <pre><code>/getup: will start djing
 
 /getdown:  will quit djing
 
-/stats: will toggle stats mode, where i will announce the votes at the end of each song
-
 /solo: will toggle solo mode and bot will skip so you can dj with yourself
 
 /set: will set a theme
-
-/nerd: will toggle nerd mode, so that a lot of the fun chat commands are available
 
 /event: will toggle event mode, so that only the set amount of event djs are allowed up
 
@@ -165,17 +157,17 @@
 
 /announce: will toggle announce mode, this controls whether i am announcing when i bop and when users downvote
 
-/auto: will act as autodj, will hop up if there are less than 3 djs on deck
+/autodj: will act as autodj, will hop up if there are less than 3 djs on deck
+
+/autoq: will toggle auto queue, the queue will turn on when there are 5 djs on deck and will turn off once only 2 djs are on deck
 
 /stalk: will follow the name after this command to the room they are currently in
 
-/game: will toggle game mode, this controls the order menu, playing rpsls and schlong
+/games: will toggle game mode, this controls the order menu, playing rpsls and schlong, and a lot of the fun chat commands are available
 
 /mc: 10 10 10 20 = 50
 
 /ttstats: will toggle ttstats boot mode, PEW PEW PEW
-
-/greet: will greet new users as they enter the room
 
 /twitter: will tweet out currently playing songs
 </code></pre>
@@ -186,7 +178,7 @@
 <h3>
 <a name="default-mode" class="anchor" href="#default-mode"><span class="octicon octicon-link"></span></a>Default Mode:</h3>
 
-<pre><code>Description: 
+<pre><code>Description: The bot will run at it's most basic level of features/interactivity. The commands available are for interaction with turntable events for the most part.
 
 
 Mod Commands: 
@@ -195,7 +187,20 @@ Mod Commands:
 /armed,
 /tweeter,
 /djs,
+/chat (pm only)
 /snag,
+/queue,
+/announce 
+/autodj
+/twitter
+/autoq,
+/battle
+/games,
+/event,
+/ttstats,
+/solo,
+/watch, 
+/trollcop,
 /toss,
 /skip,
 /boot,
@@ -203,7 +208,7 @@ Mod Commands:
 /getdown,
 /getup
 
-Global Commands: 
+Commands: 
 /help,
 /features,
 /thanks,
@@ -229,13 +234,12 @@ brb
 <h3>
 <a name="queue-mode" class="anchor" href="#queue-mode"><span class="octicon octicon-link"></span></a>Queue Mode:</h3>
 
-<pre><code>Description: 
+<pre><code>Description: The bot will keep a waitlist for listeners waiting to dj. users can "/add" themselves to the list and are called up in order to the stage. A dj is allowed to play the designated song limit before being escorted. 
 
 Mod Commands:
-/queue,
 /bump
 
-Global Commands:
+Commands:
 /add,
 /remove,
 /pos,
@@ -245,152 +249,90 @@ Global Commands:
 <h3>
 <a name="chat-mode" class="anchor" href="#chat-mode"><span class="octicon octicon-link"></span></a>Chat Mode:</h3>
 
-<pre><code>Description: 
-
-Mod Commands:
-/chat (pm only)
+<pre><code>Description: The bot will carry on a conversation with users through private messages(pm). Powered by [cleverbot](http://www.cleverbot.com/).
 </code></pre>
 
 <h3>
 <a name="battle-mode" class="anchor" href="#battle-mode"><span class="octicon octicon-link"></span></a>Battle Mode:</h3>
 
-<pre><code>Description: 
+<pre><code>Description: The bot will allow a battle list to be built, where users can add themselves. The users face off 1v1 with the designated amount of "rounds" or songs. A voting window will open up with 30 seconds left for each song played. The dj with the most votes counted is the winner.
 
-Mod Commands:
-    /battle
-
-Global Commands:
-    /add,
-    /remove,
-    /list,
-    +1
+Commands:
+/add,
+/remove,
+/list,
++1
 </code></pre>
 
 <h3>
 <a name="autodj-mode" class="anchor" href="#autodj-mode"><span class="octicon octicon-link"></span></a>Autodj Mode:</h3>
 
-<pre><code>Description: 
-
-Mod Commands: 
-    /auto
+<pre><code>Description: When the bot notices there are only two djs or less, it will hop up on stage to dj.
 </code></pre>
 
 <h3>
 <a name="solo-mode" class="anchor" href="#solo-mode"><span class="octicon octicon-link"></span></a>Solo Mode:</h3>
 
-<pre><code>Description: 
-
-Mod Commands:
-    /solo
-</code></pre>
-
-<h3>
-<a name="nerd-mode" class="anchor" href="#nerd-mode"><span class="octicon octicon-link"></span></a>Nerd Mode:</h3>
-
-<pre><code>Description: 
-
-Mod Commands: 
-    /nerd
-
-Global Commands:
-    /define,
-    /album,
-    /cats,
-    /fact,
-    /joke,
-    /quote,
-    /quakes,
-    /weed,
-    /google,
-    /tpb,
-    /molly
-</code></pre>
-
-<h3>
-<a name="stats-mode" class="anchor" href="#stats-mode"><span class="octicon octicon-link"></span></a>Stats Mode:</h3>
-
-<pre><code>Description: 
-
-Mod Commands:
-    /stats
+<pre><code>Description: The bot will stay on deck with an individual and skip itself on it's turn, so someone can dj with themselves. Once a 3rd dj hops up, solo mode is deactivated.
 </code></pre>
 
 <h2>
 <a name="afk-mode" class="anchor" href="#afk-mode"><span class="octicon octicon-link"></span></a>Afk Mode,</h2>
 
-<pre><code>Description: 
-
-Mod Commands:
-    /watch
+<pre><code>Description: Afk watch starts when a user enters the room, with the designated time limit given to them to stay active. This time is constantly draining against them, every second. Once a user chats, votes, snags or hops up to dj their afklimit is refreshed. If a user does not do any of these activities, the bot will consider and mark you afk(away from keyboard). If you are on deck and afk, you will be given the designated time to return before being removed from the stage. When you are afk &amp; in queue waitlist, you will be skipped one your turn.
 </code></pre>
 
 <h3>
 <a name="tweet-mode" class="anchor" href="#tweet-mode"><span class="octicon octicon-link"></span></a>Tweet Mode:</h3>
 
-<pre><code>Description: 
-
-Mod Commands:
-    /twitter
+<pre><code>Description: The bot will tweet various designated messages when new songs are playing, including the current song and room information.
 </code></pre>
 
 <h3>
 <a name="announce-mode" class="anchor" href="#announce-mode"><span class="octicon octicon-link"></span></a>Announce Mode,</h3>
 
-<pre><code>Description: 
-
-Mod Commands:
-    /announce
-</code></pre>
-
-<h3>
-<a name="greet-mode" class="anchor" href="#greet-mode"><span class="octicon octicon-link"></span></a>Greet Mode:</h3>
-
-<pre><code>Description: 
-
-Mod Commands:
-    /greet
+<pre><code>Description: The bot will announce when a user downvotes a currently playing song, will greet a user when they enter the room, will announce song stats at the end of each play and will show an emoji when it is dancing.
 </code></pre>
 
 <h3>
 <a name="game-mode" class="anchor" href="#game-mode"><span class="octicon octicon-link"></span></a>Game Mode:</h3>
 
-<pre><code>Description: 
+<pre><code>Description: Various game type features will be toggled that usually are called "spam", appropriately. Thing is they are pretty fun for most people it seems. Some example features are urban dictionary search, let me google that for you, i heart quotes randoms and riddles. There are actual games too, like a schlong measuring contest, rock paper scissors lizard spock, and a high number roll game.
 
-Mod Commands:
-    /game
-
-Global Commands:
-    /roll,
-    /schlong,
-    /order,
-    /menu
+Commands:
+/roll,
+/schlong,
+/order,
+/menu,
+/define,
+/album,
+/cats,
+/fact,
+/joke,
+/quote,
+/quakes,
+/weed,
+/google,
+/tpb,
+/molly
 </code></pre>
 
 <h3>
 <a name="ttstats-boot-mode" class="anchor" href="#ttstats-boot-mode"><span class="octicon octicon-link"></span></a>ttStats Boot Mode:</h3>
 
-<pre><code>Description: 
-
-Mod Commands:
-    /ttstats
+<pre><code>Description: A lot of people would rather not use the [opt out](http://www.ttstats.info/optout) but would rather boot the ttstats, here ya go.
 </code></pre>
 
 <h3>
 <a name="event-mode" class="anchor" href="#event-mode"><span class="octicon octicon-link"></span></a>Event Mode:</h3>
 
-<pre><code>Description: 
-
-Mod Commands: 
-    /event
+<pre><code>Description: Event mode can set up and event in a pinch, where only the designated amount of djs are allowed up on deck, the bot will be on and will skip itself.
 </code></pre>
 
 <h3>
 <a name="troll-cop" class="anchor" href="#troll-cop"><span class="octicon octicon-link"></span></a>Troll Cop:</h3>
 
-<pre><code>Description: 
-
-Mod Commands: 
-    /trollcop
+<pre><code>Description: During the modes where hopping on stage is restricted, the bot will boot a user after they have tried to get up 3 times in a row.
 </code></pre>
       </section>
     </div>
