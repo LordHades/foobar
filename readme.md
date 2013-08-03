@@ -258,7 +258,7 @@
 	Description: A lot of people would rather not use the [opt out](http://www.ttstats.info/optout) but would rather boot the ttstats, here ya go.
 
 ###Event Mode:
-	Description: 
+	Description: Event mode can set up and event in a pinch, where only the designated amount of djs are allowed up on deck, the bot will be on and will skip itself.
  
 ###Troll Cop:
-	Description: 
+	Description: During the modes where hopping on stage is restricted, the bot will boot a user after they have tried to get up 3 times in a row.
