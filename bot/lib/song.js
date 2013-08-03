@@ -21,9 +21,7 @@ module.exports = {
             for(i in banned_artists){
                 if(artist == banned_artists[i]){
                     bot.remDj(dj);
-                    var banned = setTimeout(function(){
-                        bot.speak("we don\'t allow any " + artist + " to be played in this room...");
-                    },750);
+                    bot.speak("we don\'t allow any " + artist + " to be played in this room...");
                 }
             }
 			listeners = data.room.metadata.listeners;
