@@ -28,6 +28,7 @@ global.bot_hangout = "";
 //MODE SETTINGS, (true=on, false=off)
 global.afk_mode = false;
 global.queue_mode = false;
+global.auto_queue = false;
 global.chat_mode = false;
 global.battle_mode = false;
 global.autodj_mode = false;

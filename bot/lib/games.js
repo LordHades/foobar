@@ -14,7 +14,7 @@ module.exports = {
 			setTimeout(
 				function(){
 					rpsGame.splice(0, rpsGame.length);
-				}, 10000);
+				}, 15000);
 			if(rpsGame.length == 2){
 				a = rpsGame.pop();
 				b = rpsGame.pop();

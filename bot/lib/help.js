@@ -259,8 +259,12 @@ module.exports = {
             "instructions": "/me will toggle announce mode, this controls greetings, end of song stats, announcing when i bop, and when users downvote"
         },
         {
-            "name": "auto",
+            "name": "autodj",
             "instructions": "/me will act as autodj, will hop up if there are less than 3 djs on deck"
+        },
+        {
+            "name": "autoq",
+            "instructions": "/me will act toggle auto queue, will set the queue mode on when there are 5 djs, off when there are 2..."
         },
         {
             "name": "stalk",
@@ -341,7 +345,8 @@ module.exports = {
                         "/twitter",
                         "/tweeter",
                         "/chat (pm only)",
-                        "/auto",
+                        "/autodj",
+                        "/autoq",
                         "/event",
                         "/trollcop",
                         "/djs",
@@ -390,6 +395,12 @@ module.exports = {
                         "/list"
                     ]
 				},
+                {
+                    name: "auto queue",
+                    value: auto_queue,
+                    mod: [],
+                    available: []
+                },
 				{
 					name: "chat mode",
 					value: chat_mode,

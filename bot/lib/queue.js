@@ -1,30 +1,37 @@
 module.exports = {
     detect: function(data){
-        switch(data.command) {
-            case "add_dj":
-                if(!queue_mode){
-                    bot.roomInfo(true, function(data){
-                        if(data.djids.length > 4){
-                            queue_mode = true;
-                            bot.speak(start_queue_msg);
-                            var automsg = setTimeout(function(){
-                                bot.speak(queue_msg);
-                            }, 750);
-                        }  
-                    });
-                }
-            break;
-            case "rem_dj":
-                if(queue_mode){
-                    bot.roomInfo(true, function(data){
-                        if(data.djids.length < 3){
-                            queue_mode = false;
-                            bot.speak(slow_queue_msg);
-                        }  
-                    });
-                }
-            break;
-        }
+        try{
+        	if(auto_queue){
+	        	switch(data.command) {
+		            case "add_dj":
+		                if(!queue_mode){
+		                    bot.roomInfo(true, function(data){
+		                        if(data.djids.length > 4){
+		                            queue_mode = true;
+		                            bot.speak(start_queue_msg);
+		                            var automsg = setTimeout(function(){
+		                                bot.speak(queue_msg);
+		                            }, 750);
+		                        }  
+		                    });
+		                }
+		            break;
+		            case "rem_dj":
+		                if(queue_mode){
+		                    bot.roomInfo(true, function(data){
+		                        if(data.djids.length < 3){
+		                            queue_mode = false;
+		                            bot.speak(slow_queue_msg);
+		                        }  
+		                    });
+		                }
+		            break;
+		        }
+		    }
+	    }catch(err){
+	    	console.log('error in queue(detect)...');
+	    	bot.signal.error(err);
+	    }
     },
 	add: function(data){
 		try{

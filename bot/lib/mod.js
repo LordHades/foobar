@@ -167,7 +167,7 @@ module.exports = {
 						console.log('error with mod(cmds) /chat...');
 						bot.signal.error(err);
 					}
-				}else if(text.match(/^\/auto$/) || text.match(/^\.auto$/)){
+				}else if(text.match(/^\/autodj$/) || text.match(/^\.autodj$/)){
 					try{
 						if(autodj_mode){
 		        			autodj_mode = false;
@@ -178,7 +178,21 @@ module.exports = {
 			        		bot.talk('auto dj on');
 			        	}
 					}catch(err){
-						console.log('error with mod(cmds) /auto...');
+						console.log('error with mod(cmds) /autodj...');
+						bot.signal.error(err);
+					}
+				}else if(text.match(/^\/autoq$/) || text.match(/^\.autoq$/)){
+					try{
+						if(autodj_mode){
+		        			auto_queue = false;
+		        			bot.talk('auto queue off');
+			        	}else{
+			        		auto_queue = true;
+			        		bot.stage.auto(data);
+			        		bot.talk('auto queue on');
+			        	}
+					}catch(err){
+						console.log('error with mod(cmds) /autodj...');
 						bot.signal.error(err);
 					}
 				}else if(text.match(/^\/stalk$/) || text.match(/^\.stalk$/)){
