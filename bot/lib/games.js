@@ -239,6 +239,7 @@ module.exports = {
     schlong: function(data){
         try{
             var id;
+            var timer = 10000;
             if(data.command == "pmmed"){
                 id = data.senderid;
             }else{
@@ -257,6 +258,7 @@ module.exports = {
                     sDSize--;
                 }
                 bot.speak('@' + name + "'s schlong is 8" + sShaft + 'D ' + sDInches + " Inches!" + ', or ' + sDCm + ' Centimeters!');
+                timer += 10000;
                 schlongs.push(data.userid);
                 schlongGame.push({name: name, id:data.id, in:sDInches, cm:sDCm});
                 weiners.push(sDInches);
@@ -277,7 +279,7 @@ module.exports = {
                             weiners = [];
                             schlongs = [];
                         }
-                    }, 30000);
+                    }, timer);
                 }
             }else{
                 bot.speak('stop being a :trollface: @' + name + ' get used to the .schlong u were born with');
@@ -293,6 +295,7 @@ module.exports = {
     roll: function(data){
         try{
             var id;
+            var timer = 10000;
             if(data.command == "pmmed"){
                 id = data.senderid;
             }else{
@@ -301,6 +304,7 @@ module.exports = {
             var index = rollers.indexOf(id);
             if(index == -1){
                 var roll = Math.floor(Math.random() * 99) + 1;
+                timer += 10000;
                 bot.speak('@' + name + " rolled a :game_die:" + roll);
                 rollers.push(id);
                 roll_scores.push({name: name, id: id, roll: roll});
@@ -321,7 +325,7 @@ module.exports = {
                             rolls = [];
                             rollers = [];
                         }
-                    }, 15000);
+                    }, timer);
                 }
             }else{
                 bot.pm(":trollface:", id)
@@ -336,7 +340,8 @@ module.exports = {
     },
     blackjack: {
         deal: function(data){
-            
+            betting_one = false;
+            data_holder = [];
             //build deck class
             var Deck = function(){
                 this.cards = [];
@@ -348,6 +353,8 @@ module.exports = {
                     "clubs"
                 ];
                 this.emojis = [
+                    "",
+                    ":a:",
                     ":two:",
                     ":three:",
                     ":four:",
@@ -359,11 +366,10 @@ module.exports = {
                     ":keycap_ten:",
                     "J",
                     "Q",
-                    "K",
-                    ":a:"
+                    "K"
                 ];
                 for(i=0; i<4; i++){
-                    for(j=0; j<13; j++){
+                    for(j=1; j<14; j++){
                         switch(this.suits[i]){
                             case "hearts":
                                 this.suits[i] = ":hearts:";
@@ -388,28 +394,100 @@ module.exports = {
             
             //build player class
             var Player = function(name, acl){
+                this.self = this;
                 this.name = name;
                 this.hand = [];
                 this.score = 0;
                 this.acl = acl;
             }
-            Player.prototype.draw = function(data){
+            Player.prototype.draw = function(name){ 
                 var value = Math.floor(Math.random() * deck.cards.length);
                 var card = {num:deck.cards[value].num, sym:deck.cards[value].sym, suit: deck.cards[value].suit};
+                if(card.num >= 10){
+                    card.num = 10;
+                }
+                if(card.num == 1){
+                    card.num = 11;
+                }
                 this.hand.push(card);
                 this.score += card.num;
                 deck.cards.splice(value, 1);
-                this.check(this.hand);
+                this.check(this.hand, this.score);
             };
-            Player.prototype.check = function(hand){  
+            Player.prototype.check = function(hand, score){  
                 var str = '';
-                if(hand.length == 2){
-                    for(i in hand){
-                        str += hand[i].num + hand[i].sym + hand[i].suit; 
-                        bot.speak(name + " has " + str + " and a score of " + this.score);   
-                    }
+                if(score == 21){
+                    bot.speak(name + " just got BLACKJACK :exclamation:");
                 }
+                if(hand.length == 2 && this.acl == 1){
+                    for(i in hand){
+                        str += hand[i].sym + hand[i].suit; 
+                    }
+                    bot.speak("@" + name + " has " + str);
+                }else if(hand.length == 2 && this.acl == 0){
+                    bot.speak("/me is showing a " + hand[1].sym + hand[1].suit);
+                }
+                betting_one = true;
+                this.hit(hand, score);
             };
+            Player.prototype.hit = function(hand, score){
+                var str = '';
+                var timer = 10000;
+                var hittimer = setTimeout(function(){
+                    for(i in data_holder){
+                        if(data_holder[i].name == name){
+                            if(data_holder[i].text.match(/^\/hit$/)){
+                                timer += 10000;
+                                var value = Math.floor(Math.random() * deck.cards.length);
+                                var card = {num:deck.cards[value].num, sym:deck.cards[value].sym, suit: deck.cards[value].suit};
+                                if(card.num >= 10){
+                                    card.num = 10;
+                                }
+                                if(card.num == 1){
+                                    card.num = 11;
+                                }
+                                user.hand.push(card);
+                                user.score += card.num;
+                                deck.cards.splice(value, 1);
+                                for(i in hand){
+                                    str += user.hand[i].sym + user.hand[i].suit; 
+                                }
+                                bot.speak("@" + name + " has " + str);
+                                if(user.score == 21){
+                                    bot.speak(name)
+                                    bot.speak(name + " just got BLACKJACK :exclamation:");
+                                }else if(user.score > 21){
+                                    bot.speak(name + " just BUSTED :(");
+                                }
+                            }else if(data_holder[i].text.match(/^\/stay$/)){
+                                timer += 10000;
+                                bot.speak(dealer.name + " draws a card..");
+                                var value = Math.floor(Math.random() * deck.cards.length);
+                                var card = {num:deck.cards[value].num, sym:deck.cards[value].sym, suit: deck.cards[value].suit};
+                                if(card.num >= 10){
+                                    card.num = 10;
+                                }
+                                if(card.num == 1){
+                                    card.num = 11;
+                                }
+                                dealer.hand.push(card);
+                                dealer.score += card.num;
+                                deck.cards.splice(value, 1);
+                                for(i in dealer.hand){
+                                    str += dealer.hand[i].sym + dealer.hand[i].suit; 
+                                }
+                                bot.speak("@" + dealer.name + " has " + str);
+                                if(dealer.score == 21){
+                                    bot.speak(name)
+                                    bot.speak(name + " just got BLACKJACK :exclamation:");
+                                }else if(dealer.score > 21){
+                                    bot.speak(dealer.name + " just BUSTED :(");
+                                }
+                            }
+                        }
+                    }
+                },timer);
+            };  
             
             //get players
             var user = new Player(data.name, 1);
@@ -417,16 +495,16 @@ module.exports = {
 
             //deal hands
             setTimeout(function(){
-                user.draw();
+                user.draw(this.name);
             }, 0);
             setTimeout(function(){
-                dealer.draw();
+                dealer.draw(this.name);
             }, 500);
             setTimeout(function(){
-                user.draw();
+                user.draw(this.name);
             }, 1000);
             setTimeout(function(){
-                dealer.draw();
+                dealer.draw(this.name);
             }, 1500);
         }
     }

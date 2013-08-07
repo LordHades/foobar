@@ -15,7 +15,7 @@ global.tweet_trend = "#YOLO";
 global.tweet_mention = "";
 
 //BOT PROFILE SETTINGS
-global.botname = "@basedgod";
+global.botname = "@swagbot";
 global.bot_avatar = "18";
 global.bot_laptop = "linux";
 global.bot_twitter = "@f0obarbaz";

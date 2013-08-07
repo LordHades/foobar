@@ -39,6 +39,9 @@ module.exports = {
 			bot.signal.log(data);
 			if(wiretap){
 				transmit.push(data.text);
+			}			
+			if(betting_one){
+				data_holder.push({name: data.name, id: data.userid, text: data.text});
 			}
 			if(poll == true){
 				switch(data.text){
@@ -114,6 +117,7 @@ module.exports = {
 				try{
 					bot.becomeFan(data.userid, function(res) {
 						if(res.success){
+							bot.talk(':star: @' + data.name);
 							bot.becomeFan(data.userid);
 						}else{
 							bot.talk('I already fanned u @' + name);
