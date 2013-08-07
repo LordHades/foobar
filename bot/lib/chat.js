@@ -7,27 +7,29 @@ module.exports = {
 					this.speak(msg);
 				}  
 				if(data.userid == botid){
-					console.log('> bot talking... : ' + data.text);
 					return false;
 				}
 			}else if(data.command == 'pmmed'){
-                console.log(data.senderid, curusers);
-				for(i in curusers){
-					if(data.senderid == curusers[i].userid){
-						name = curusers[i].name;
-					}else{
-    				    name = "user not in room, id: "+ curusers[i].userid;   
+				bot.roomInfo(true, function(){
+					for(i in curusers){
+						if(data.userid == curusers[i].userid){
+							name = curusers[i].name;
+						}else{
+	    				    name = "user not in room, id: "+ curusers[i].userid;   
+						}
 					}
-				}
-				bot.talk = function(msg){
-					this.pm(msg, data.senderid);
-				}
-				if(chat_mode && data.senderid !== botid){
-					var cb = new clever;
-					cb.write(data.text,function(resp){
-						bot.pm(resp.message, data.senderid);
-					});
-				}
+					bot.talk = function(msg){
+						this.pm(msg, data.senderid);
+					}
+					if(chat_mode){
+						if(data.senderid !== botid){
+							var cb = new clever;
+							cb.write(data.text,function(resp){
+								bot.pm(resp.message, data.senderid);
+							});
+						}
+					}
+				});
 			}
 			text = data.text.toLowerCase();
 			bot.afk.give(data);
@@ -42,7 +44,7 @@ module.exports = {
 				switch(data.text){
 					case '+1':
 					if(data.userid == currentDjId){
-						bot.speak('you can\'t vote for yourself @' + data.name);
+						bot.speak('you can\'t vote for yourself @' + name);
 						return;
 					}
 					var index = voters.indexOf(data.userid);
@@ -84,6 +86,17 @@ module.exports = {
                     }
                 }catch(err){
 					console.log('error on chat(cmds) /menu...');
+					bot.signal.error(err);
+				}
+			}else if(text.match(/^\/deal$/) || text.match(/^\.deal$/)){
+    			try{
+                    if(game_mode){
+				    	bot.games.blackjack.deal(data);
+                    }else{
+                        bot.pm('game mode is off...', data.senderid);
+                    }
+                }catch(err){
+					console.log('error on chat(cmds) /deal...');
 					bot.signal.error(err);
 				}
 			}else if(text.match(/^\/roll$/) || text.match(/^\.roll$/)){

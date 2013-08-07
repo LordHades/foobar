@@ -292,32 +292,142 @@ module.exports = {
     },
     roll: function(data){
         try{
-            var id = data.userid;
-            var name = data.name;
-            var index = rolls.indexOf(id);
-            if(index == -1){
-                rolls.push(id);
-                var num = Math.floor(Math.random() * 99);
-                roll_scores.push(num);
-                bot.speak(data.name + " rolled a " + num);
-                rollers.push({name: name, id: id, roll: num});
-                var rollGame = setTimeout(function(){
-                    var winner = Math.max.apply(Math, roll_scores);
-                    for(i in rollers){
-                        if(winner == rollers[i].roll){
-                            bot.speak("@" + rollers[i].name + " wins with a roll of " + winner);
-                        }
-                        rollers.splice(0, rollers.length);
-                        roll_scores = [];
-                        rolls = [];
-                    }
-                }, 15000);
+            var id;
+            if(data.command == "pmmed"){
+                id = data.senderid;
             }else{
-                bot.pm(":trollface:", id);
+                id = data.userid;
+            }
+            var index = rollers.indexOf(id);
+            if(index == -1){
+                var roll = Math.floor(Math.random() * 99) + 1;
+                bot.speak('@' + name + " rolled a :game_die:" + roll);
+                rollers.push(id);
+                roll_scores.push({name: name, id: id, roll: roll});
+                rolls.push(roll);
+                clearTimeout(rolling);
+                if(rollers.length > 1){
+                    var rolling = setTimeout(function(){
+                        for(i in roll_scores){
+                            if(rolls.length > 1){
+                                var winner = Math.max.apply(Math, rolls);
+                                for(i in roll_scores){
+                                    if(winner == roll_scores[i].roll){
+                                        bot.speak('@' + roll_scores[i].name + " wins with a :game_die: of " + winner);
+                                    }
+                                }
+                            }
+                            roll_scores.splice(0, roll_scores.length);
+                            rolls = [];
+                            rollers = [];
+                        }
+                    }, 15000);
+                }
+            }else{
+                bot.pm(":trollface:", id)
+            }
+            if(debug){
+                console.log('games(roll) running...');
             }
         }catch(err){
             console.log('error in games(roll)...');
             bot.signal.error(err);
+        }
+    },
+    blackjack: {
+        deal: function(data){
+            
+            //build deck class
+            var Deck = function(){
+                this.cards = [];
+                this.count = 52;
+                this.suits = [
+                    "hearts",
+                    "diamonds",
+                    "spades",
+                    "clubs"
+                ];
+                this.emojis = [
+                    ":two:",
+                    ":three:",
+                    ":four:",
+                    ":five:",
+                    ":six:",
+                    ":seven:",
+                    ":eight:",
+                    ":nine:",
+                    ":keycap_ten:",
+                    "J",
+                    "Q",
+                    "K",
+                    ":a:"
+                ];
+                for(i=0; i<4; i++){
+                    for(j=0; j<13; j++){
+                        switch(this.suits[i]){
+                            case "hearts":
+                                this.suits[i] = ":hearts:";
+                            break;
+                            case "diamonds":
+                                this.suits[i] = ":diamonds:";
+                            break;
+                            case "clubs":
+                                this.suits[i] = ":clubs:";
+                            break;
+                            case "spades":
+                                this.suits[i] = ":spades:";
+                            break;
+                        }
+                        this.cards.push({num: j, sym: this.emojis[j], suit: this.suits[i]});
+                    }
+                }            
+            }
+            
+            //create new deck instance
+            var deck = new Deck();
+            
+            //build player class
+            var Player = function(name, acl){
+                this.name = name;
+                this.hand = [];
+                this.score = 0;
+                this.acl = acl;
+            }
+            Player.prototype.draw = function(data){
+                var value = Math.floor(Math.random() * deck.cards.length);
+                var card = {num:deck.cards[value].num, sym:deck.cards[value].sym, suit: deck.cards[value].suit};
+                this.hand.push(card);
+                this.score += card.num;
+                deck.cards.splice(value, 1);
+                this.check(this.hand);
+            };
+            Player.prototype.check = function(hand){  
+                var str = '';
+                if(hand.length == 2){
+                    for(i in hand){
+                        str += hand[i].num + hand[i].sym + hand[i].suit; 
+                        bot.speak(name + " has " + str + " and a score of " + this.score);   
+                    }
+                }
+            };
+            
+            //get players
+            var user = new Player(data.name, 1);
+            var dealer = new Player(botname, 0);
+
+            //deal hands
+            setTimeout(function(){
+                user.draw();
+            }, 0);
+            setTimeout(function(){
+                dealer.draw();
+            }, 500);
+            setTimeout(function(){
+                user.draw();
+            }, 1000);
+            setTimeout(function(){
+                dealer.draw();
+            }, 1500);
         }
     }
 }

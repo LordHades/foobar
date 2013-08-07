@@ -26,7 +26,7 @@ module.exports = {
         },
         {
             "name": "tea",
-            "instructions": "/me steeps up some :tea: for"
+            "instructions": "/me steeps up some :tea: for",
         },
         {
             "name": "weed",

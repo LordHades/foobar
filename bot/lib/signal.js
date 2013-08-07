@@ -6,17 +6,17 @@ module.exports = {
 			var greeting;
 			for(i in mods){
 				if(user.userid == mods[i]){
-					greeting = modgreet;
+					greeting = modgreet + " , theme is: " + theme;
 					bot.pm(greeting, user.userid);
 					return;
 				}
 			}
 			if(queue_mode){
-				greeting = welcome + ' ' + queue_msg;
+				greeting = welcome + " " + queue_msg + " , the theme is: " + theme;
 			}else if(battle_mode){
-				greeting = welcome + ' ' + battle_msg;
+				greeting = welcome + " " + battle_msg + " , the theme is: " + theme;
 			}else{
-				greeting = welcome +  " "  + botgreet;
+				greeting = welcome +  " "  + botgreet + " , the theme is: " + theme;
 			}
 			if(user.userid == botid){
 				console.log('> running...');
@@ -498,12 +498,25 @@ module.exports = {
 		try{
 			if(battle_mode){
 				bot.talk(battle_msg);
+				var ruleset = setTimeout(function(){
+					for(i in rules){
+						bot.talk(rules[i]);
+					}
+				}, 1000);
 			}else if(queue_mode){
 				bot.talk(queue_msg);
-			}else{		
-				for(i in rules){
-					bot.talk(rules[i]);
-				}
+					var ruleset = setTimeout(function(){
+						for(i in rules){
+							bot.talk(rules[i]);
+						}
+					}, 1000);
+			}else{
+				bot.talk(ffa_msg);
+				setTimeout(function(){
+					for(i in rules){
+						bot.talk(rules[i]);
+					}
+				}, 1000);
 			}
 			if(debug){
 				console.log('signal(rules) running...');

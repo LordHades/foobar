@@ -6,9 +6,9 @@ module.exports = {
 			transmit = [];
 			wiretap = 'true';
 			var systems = setTimeout(function(){
-				var x = transmit.indexOf(lanchcodes[0]);
-				var y = transmit.indexOf(lanchcodes[1]);
-				var z = transmit.indexOf(lanchcodes[2]);
+				var x = transmit.indexOf(launchcodes[0]);
+				var y = transmit.indexOf(launchcodes[1]);
+				var z = transmit.indexOf(launchcodes[2]);
 				if(x >= 0 && y >= 0 && z >= 0){
 					launch = true;
 					var count = setTimeout(function(){

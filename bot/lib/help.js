@@ -29,6 +29,10 @@ module.exports = {
             "instructions": "/me will remove you from the stage"
         },
         {
+            "name": "deal",
+            "instructions": "/me will deal 2 cards. (/hit, /split, /double, or /stay) will control your hands, in an attempt to beat dealer to 21, without exceeding, 'busting'. Keep your cards close and have fun! (*note - :a: value = 1 or 11, you decide)"
+        },
+        {
             "name": "bop",
             "instructions": "/me will start to bop"
         },
@@ -455,6 +459,7 @@ module.exports = {
                     mod: [],
                     available: [
                         "/rspls",
+                        "/roll",
                         "/schlong",
                         "/order",
                         "/menu",

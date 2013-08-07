@@ -161,6 +161,7 @@ module.exports = {
 	theme: function(data){
 		try{
 			var setTheme;
+			var text = data.text;
 			var index = text.indexOf('/');
 			if(index >= 0){
 				sym = '/';
