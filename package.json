@@ -1,0 +1,25 @@
+{
+  "name": "foobar",
+  "version": "0.0.1",
+  "description": "turntable.fm bot extraordinaire",
+  "main": "/bot/main.js",
+  "scripts": {
+    "test": "node main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theylive/foobar.git"
+  },
+  "keywords": [
+    "turntable",
+    "bot",
+    "foobar"
+  ],
+  "author": "theylive <theylive@freethinc.org> (http://theylive.freethinc.org/)",
+  "license": "MIT",
+  "readmeFilename": "readme.md",
+  "gitHead": "1e4668ea1d256a30b269cdab05bc195309d327c9",
+  "bugs": {
+    "url": "https://github.com/theylive/foobar/issues"
+  }
+}
