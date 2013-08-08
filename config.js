@@ -1,16 +1,16 @@
 /* foobar is a creation of theylive, de nada */
 
 //TURNTABLE CREDENTIALS
-global.auth = "FzPiMNPjGnBjVoriKQzAFYYp";
-global.botid = "51958aa5eb35c1598caf8627";
-global.room = "51fc9246eb35c104c8d2ffd7";
-//global.room = "51df63e5eb35c114fa61a584";
+global.auth = "";
+global.botid = "";
+global.room = "";
+//global.room = "";
 
 //TWITTER CREDENTIALS
-global.consumer_key = "J15bwPB24CCSEhloPAQ";
-global.consumer_secret = "F7jSTgIyHFC9DjCxjdgIDXkzWOirrdZ2HbLz4PmGQag";
-global.access_token = "1557173010-6QphsxZ6uZDcJRmAtkUZJCNeFuh8h01q0LqPzcr";
-global.access_token_secret = "1H90EhcQhetNUcWBwnPc3Kn3vp0yaMQ0Csk2hU6Q";
+global.consumer_key = "";
+global.consumer_secret = "";
+global.access_token = "";
+global.access_token_secret = "";
 global.tweet_trend = "#YOLO";
 global.tweet_mention = "";
 
@@ -80,7 +80,8 @@ global.congrats_msgs = [
 //banned artists (type artist names, enter as many as needed)
 global.banned_artists = [
     "Katy Perry",
-    "justin bieber"
+    "Justin Bieber",
+    "Jonas Brothers"
 ];
 
 //blacklisted userids (just add as many userids as you need to, they are banned upon entrance)
