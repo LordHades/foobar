@@ -20,7 +20,7 @@ global.bot = new Bot(auth, botid, room);
 repl.start('> ').context.bot = bot;
 bot.on('ready', function(data){this.system.ready(data);});
 bot.on('roomChanged', function (data){this.system.change(data);});
-//bot.on('registered', function (data){this.system.register(data);});
+bot.on('registered', function (data){this.system.register(data);});
 bot.on('add_dj', function (data){this.system.get_dj(data);});
 bot.on('rem_dj', function (data){this.system.give_dj(data);});
 bot.on('speak', function (data){this.commands.listen(data);});

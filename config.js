@@ -3,34 +3,34 @@
 /**************************************************/
 /*            TURNTABLE CREDENTIALS               */
 /**************************************************/
-global.master = "xxx";
-global.auth = "xxx";
-global.botid = "xxx";
-global.room = "xxx";
+global.master = "";
+global.auth = "";
+global.botid = "";
+global.room = "";
 
 /**************************************************/
 /*            TWITTER CREDENTIALS                 */
 /**************************************************/
-global.consumer_key = "xxx";
-global.consumer_secret = "xxx";
-global.access_token = "xxx";
-global.access_token_secret = "xxx";
-global.tweet_trend = "xxx";
-global.tweet_mention = "xxx";
+global.consumer_key = "";
+global.consumer_secret = "";
+global.access_token = "";
+global.access_token_secret = "";
+global.tweet_trend = "";
+global.tweet_mention = "";
 
 /**************************************************/
 /*           BOT PROFILE SETTINGS                 */
 /**************************************************/
-global.botname = "xxx";
-global.bot_avatar = "xxx";
-global.bot_laptop = "xxx";
-global.bot_twitter = "xxx";
+global.botname = "";
+global.bot_avatar = "";
+global.bot_laptop = "";
+global.bot_twitter = "";
 global.bot_soundcloud = ""; 
-global.bot_website = "http://theylive.github.io/foobar/";
-global.bot_facebook = "xxx"; 
-global.bot_about = "xxx";
-global.bot_favArtists = "xxx";
-global.bot_hangout = "YOLO.FM";
+global.bot_website = "";
+global.bot_facebook = ""; 
+global.bot_about = "";
+global.bot_favArtists = "";
+global.bot_hangout = "";
 
 /**************************************************/
 /*           MODE DEFUALT SETTINGS                */
@@ -40,7 +40,7 @@ global.queue_mode = false;
 global.auto_queue = false;
 global.chat_mode = false;
 global.battle_mode = false;
-global.autodj_mode = false;
+global.autodj_mode = true;
 global.solo_mode = false;
 global.announce_mode = false;
 global.tweet_mode = false;
@@ -60,33 +60,33 @@ global.event_djs = 3;
 /**************************************************/
 /*          ROOM INFO, EVENT MESSAGES             */
 /**************************************************/
-global.botgreet = "xxx";
-global.modgreet = "xxx";
-global.ffa_msg = "xxx";
-global.queue_msg = "xxx";
-global.battle_msg = "xxx";
-global.boot_msg = "xxx";
-global.event_warn = "xxx";
-global.battle_warn = "xxx";
-global.autodjup_msg = "xxx";
-global.dive_msg = "xxx";
-global.slow_queue_msg = "xxx";
-global.start_queue_msg = "xxx";
-global.autodjdown_msg_now = "xxx";
-global.autodjdown_msg_later = "xxx";
-global.theme = "xxx";
+global.botgreet = "";
+global.modgreet = "";
+global.ffa_msg = "";
+global.queue_msg = "";
+global.battle_msg = "";
+global.boot_msg = "";
+global.event_warn = "";
+global.battle_warn = "";
+global.autodjup_msg = "";
+global.dive_msg = "";
+global.slow_queue_msg = "";
+global.start_queue_msg = "";
+global.autodjdown_msg_now = "";
+global.autodjdown_msg_later = "";
+global.theme = "";
 
 //enter your rules, as many lines as you need
 global.rules = [ 
-	"xxx",
-	"xxx"
+	"",
+	""
 ];
 
 //congrats message for djs' thousand point parties
 global.congrats_msgs = [
-	"xxx",
-	"xxx",
-	"xxx"
+	"",
+	"",
+	""
 ];
 
 /**************************************************/
@@ -112,8 +112,7 @@ global.banned_artists = [
 /*              BANNED USERS LIST                 */
 /**************************************************/
 global.banlist = [
-    "",
-    ""
+	""
 ];
 
 /**************************************************/
@@ -137,7 +136,7 @@ global.memes = [
 /*        NUKE LAUNCHCODES, MUST BE 3             */
 /**************************************************/
 global.launchcodes = [
-    "xxx",
-	"xxx",
-	"xxx"
+    "",
+	"",
+	""
 ];
